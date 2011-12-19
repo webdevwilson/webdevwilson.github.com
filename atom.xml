@@ -14,7 +14,7 @@ layout: nil
    <email>kerry@goodercode.com</email>
  </author>
 
- {% for post in site.posts %}
+ {% for post in site.posts limit:25 %}
  <entry>
    <title>{{ post.title }}</title>
    <link href="http://webdevwilson.github.com{{ post.url }}"/>
