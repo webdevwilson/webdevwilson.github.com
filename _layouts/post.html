@@ -1,7 +1,9 @@
-<div>
+<header>
     <h1>{{ post.title }}</h1>
     <span>{{ post.date | date_to_string }}</span>
+</header>
+<article>
     <div>
-        {{ post.post }}
+        {{ content }}
     </div>
-</div>
+</article>
