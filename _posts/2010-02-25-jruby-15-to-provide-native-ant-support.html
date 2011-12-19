@@ -1,0 +1,16 @@
+--- 
+layout: post
+title: JRuby 1.5 to provide native support for Ant
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1267032501"
+tags: 
+- ant
+- jruby
+- Lessons
+- rake
+type: post
+status: publish
+---
+<p>In case you haven’t heard, the next version of JRuby will provide native support for Ant.&#160; Much like <a href="http://antwrap.rubyforge.org/" target="_blank">antwrap</a>, you will be able to call ant tasks straight from Ruby.&#160; There are some pretty good examples <a href="http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/" target="_blank">here</a>, but no examples of how to get it running on your machine today.</p>  <ol>   <li>First, you will need to install <a href="http://git-scm.com/" target="_blank">Git SCM</a> </li>    <li>Next, create a directory, JRuby on your machine </li>    <li>CD to that directory, and run ‘git init’ </li>    <li>Next, run ‘git pull git://github.com/jruby/jruby.git’ </li>    <li>Once it has finished downloading, you can run ‘ant’ to build it</li>    <li>Now, just use the executable jar under bin to run the latest version of JRuby</li> </ol>  <p>Now get started converting those nasty ant builds to rake.</p>

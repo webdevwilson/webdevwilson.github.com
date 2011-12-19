@@ -1,0 +1,156 @@
+--- 
+layout: post
+title: Using Cucumber tests with Maven and Java
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1310786472"
+tags: 
+- cucumber
+- java
+- Lessons
+- maven
+type: post
+status: publish
+---
+<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushCucumber.js"></script><script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushBash.js"></script><script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPlain.js"></script><script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script>Want to jump right in?  I have zipped up a working project, with examples.  You can download it <a href="/resources/maven-cuke.zip">here</a>.
+
+What's that?  You like using <a href="http://cukes.info/" target="_blank">Cucumber</a> and want to use it with your Java project but your company ecosystem is not hip to JRuby?  Enter the <a href="http://wiki.github.com/aslakhellesoy/cuke4duke/" target="_blank">cukes4duke</a> project, which allows you to run cucumber with most JVM-based languages.  I am focusing on running it with the <a href="http://maven.apache.org/" target="_blank">Maven</a> plugin.  This tutorial assumes you have maven installed, and Java knowledge.
+
+Before you start, you must run the following goal.  It will install JRuby and the gems to your .m2 repository.
+<pre class="brush: bash">mvn -Dcucumber.installGems=true cuke4duke:cucumber</pre>
+Then add the following to your pom:
+<pre class="brush: xml">
+    <repositories>
+        <repository>
+            <id>codehaus</id>
+            <url>http://repository.codehaus.org</url>
+        </repository>
+        <repository>
+            <id>cukes</id>
+            <url>http://cukes.info/maven</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>cukes</id>
+            <url>http://cukes.info/maven</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <properties>
+        <cuke4duke.version>0.3.2</cuke4duke.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cuke4duke</groupId>
+            <artifactId>cuke4duke</artifactId>
+            <version>${cuke4duke.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+            <version>2.8.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>cuke4duke</groupId>
+                <artifactId>cuke4duke-maven-plugin</artifactId>
+                <version>${cuke4duke.version}</version>
+                <configuration>
+                    <jvmArgs>
+                        <jvmArg>
+                  -Dcuke4duke.objectFactory=cuke4duke.internal.jvmclass.PicoFactory
+                        </jvmArg>
+                        <jvmArg>${cucumber.debug}</jvmArg>
+                    </jvmArgs>
+                    <cucumberArgs>
+                        <cucumberArg>${basedir}/target/test-classes</cucumberArg>
+                        <cucumberArg>--tags ~@wip</cucumberArg>
+                    </cucumberArgs>
+                    <gems>
+                        <gem>install cuke4duke --version ${cuke4duke.version}</gem>
+                    </gems>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>run-features</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>cucumber</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</pre>
+Next, create a feature file under the 'features' directory (at the root of your project).
+
+features/example.feature:
+<pre class="brush: cucumber">Feature: Example of a feature file
+  As some aspiring cuke4duke user
+  I want an example of how it works
+  So that I can easily setup my project to use it
+  
+  # This should pass
+  Scenario: A simple passing scenario
+    Given the letter 'A'
+    When I check the letter
+    Then the letter should be 'A'</pre>
+Then, create a 'step' class under src/test/java/cukes:
+
+src/test/java/cukes/CukeSteps.java:
+<pre class="brush: java">package cukes;
+
+import cuke4duke.annotation.I18n.EN.Given;
+import cuke4duke.annotation.I18n.EN.Then;
+import cuke4duke.annotation.I18n.EN.When;
+
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+
+public class CukeSteps {
+
+    private char theLetter;
+
+    @Given("^the letter '([A-Za-z])'$")
+    public void gimmeALetter(final char theLetter) {
+        this.theLetter = theLetter;
+    }
+
+    @When("^I check the letter(?:s)?$")
+    public void checkThem() {
+        // just a stub
+    }
+
+    @Then("^the letter should be '([A-Za-z])'$")
+    public void checkTheLetter(final char aLetter) {
+        assertThat(theLetter, is(aLetter));
+    }
+}</pre>
+Now, run that test using:
+<pre class="brush: bash">mvn integration-test</pre>
+I have zipped up an example project with more example steps.  It is located <a href="/resources/maven-cuke.zip">here</a>.

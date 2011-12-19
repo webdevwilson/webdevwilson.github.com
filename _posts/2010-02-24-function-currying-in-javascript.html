@@ -1,0 +1,50 @@
+--- 
+layout: post
+title: Function currying in Javascript
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1278790358"
+tags: 
+- ajax
+- javascript
+- Lessons
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJScript.js"></script><p>Do you catch yourself doing something like this often? </p>
+
+<pre class="brush: js">
+
+  Ajax.request('/my/url', {'myParam': paramVal}, function() { 
+    myCallback(paramVal); 
+  });
+
+</pre>
+
+<p>Creating a function which calls another function asynchronously is a bad idea because the value of paramVal may change before it is called.&#160; Enter the curry function:</p>
+
+<pre class="brush: js">
+
+Function.prototype.curry = function(scope) {
+  var args = [];
+  for (var i=1, len = arguments.length; i < len; ++i) {
+    args.push(arguments[i]);
+  }
+  var m = this;
+  return function() {
+    m.apply(scope, args);
+  };
+}
+
+</pre>
+
+<p>This function creates a wrapper around the function and ‘locks in’ the method parameters.&#160; The first parameter is the scope of the function call (usually this or window).&#160; Any remaining parameters will be passed to the method call.&#160; Using the curry method the above call changes to:</p>
+
+<pre class="brush: js">
+
+Ajax.request('/my/url', {'myParam': paramVal}, myCallback.curry(window, paramVal));
+
+</pre>
+
+<p>Remember when passing objects to the curry method that the objects members may still change.</p>

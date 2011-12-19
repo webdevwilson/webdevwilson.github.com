@@ -1,0 +1,76 @@
+--- 
+layout: post
+title: Using runtime generic type reflection to build a smarter DAO
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1279503294"
+tags: 
+- generics
+- java
+- Lessons
+- reflection
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script>Have you ever wished you could get the runtime type of your generic class?  I wonder why they didn't put this in the language.  It is possible, however, with reflection:
+
+Consider a data access object (DAO) (note: I had to use brackets b/c the arrows were messing with wordpress):
+
+<pre class="brush: java">
+public interface Identifiable {
+   
+   public Long getId();
+
+}
+
+public interface Dao< T extends Identifiable > {
+
+  public T findById(Long id);
+
+  public void save(T obj);
+
+  public void delete(T obj);
+
+}
+</pre>
+
+Using reflection, we can create a DAO implementation base class, HibernateDao, that will work for any object:
+
+<pre class="brush: java">
+
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+
+public class HibernateDao< T extends Identifiable> implements Dao< T > {
+
+  private final Class clazz;
+
+  public HibernateDao(Session session) {
+    // the magic
+    ParameterizedType parameterizedType = (ParameterizedType) clazz.getGenericSuperclass();
+    return (Class) parameterizedType.getActualTypeArguments()[0];
+  }
+
+  public T findById(Long id) {
+    return session.get(clazz, id);
+  }
+
+  public void save(T obj) {
+    session.saveOrUpdate(obj);
+  }
+
+  public void delete(T obj) {
+    session.delete(obj);
+  }
+}
+
+</pre>
+
+Then, all we have to do is extend from the class:
+
+<pre class="brush: java">
+public class BookDaoHibernateImpl extends HibernateDao< Book > {
+
+}
+</pre>

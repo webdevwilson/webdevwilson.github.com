@@ -1,0 +1,47 @@
+--- 
+layout: post
+title: Clean file separators in Ruby without File.join
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1278791166"
+tags: 
+- Developer Tools
+- ruby
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I love anything that can be done to clean up source code and make it more readable.&#160; So, when I came upon <a href="http://offthelip.org/?p=56" target="_blank">this post</a>, I was pretty excited.&#160; This is precisely the kind of thing I love.</p>  <p>I have never felt good about ‘file separator’ strings b/c of their ugliness and verbosity.</p>  <p>In Java we have:</p>  
+
+<pre class="brush: java">
+String path = "lib"+File.separator+"etc";
+</pre>
+
+<p>And in Ruby a popular method is:</p>
+
+<pre class="brush: ruby">
+path = File.join("lib","etc")
+</pre>
+
+<p>Now, by overloading the ‘/’ operator on a String in Ruby:</p>
+
+<pre class="brush: ruby">
+class ::String
+
+  def /(str_to_join)
+    File.join(self, str_to_join)
+  end
+
+end
+</pre>
+
+<p>We can now write:</p>
+
+<pre class="brush: ruby">
+
+path = 'lib'/'src'/'main'
+
+</pre>
+
+Brilliant! 
+

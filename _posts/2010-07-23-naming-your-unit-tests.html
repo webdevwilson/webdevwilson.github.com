@@ -1,0 +1,74 @@
+--- 
+layout: post
+title: Naming your unit tests
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1279504725"
+tags: 
+- agile
+- java
+- Lessons
+- ruby
+- unit tests
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script>When you create a test for your class, what kind of naming convention do you use for the tests?  How thorough are your tests?  I have lately switched from the conventional camel case test names to lower case letters with underscores.  I have found this increases the readability and causes me to write better tests.
+
+A simple utility class:
+
+<pre class="brush: java">
+
+public class ArrayUtils {
+
+  public static < T > T[] gimmeASlice(T[] anArray, Integer start, Integer end) {
+    // implementation (feeling lazy today)
+  }
+
+}
+
+</pre>
+
+I have seen some people who would write a test like this:
+
+<pre class="brush: java">
+
+public class ArrayUtilsTest {
+
+  @Test
+  public void testGimmeASliceMethod() {
+    // do some tests
+  }
+}
+
+</pre>
+
+A more thorough and readable test would be:
+
+<pre class="brush: java">
+public class ArrayUtilsTest {
+
+  @Test
+  public void gimmeASlice_returns_appropriate_slice() {
+    // ...
+  }
+
+  @Test
+  public void gimmeASlice_throws_NullPointerException_when_passed_null() {
+    // ...
+  }
+  
+  @Test
+  public void gimmeASlice_returns_end_of_array_when_slice_is_partly_out_of_bounds() {
+   // ...
+  }
+
+  @Test
+  public void gimmeASlice_returns_empty_array_when_slice_is_completely_out_of_bounds() {
+    // ...
+  }
+}
+</pre>
+
+Looking at this test, you have no doubt what the method is supposed to do.  And, when one fails, you will know exactly what the issue is.

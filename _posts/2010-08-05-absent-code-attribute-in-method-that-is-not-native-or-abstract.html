@@ -1,0 +1,31 @@
+--- 
+layout: post
+title: Absent Code attribute in method that is not native or abstract
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1281041079"
+tags: 
+- java
+- Lessons
+- maven
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPlain.js"></script>I got the following, quite puzzling error today when running a unit test:
+
+<pre class="brush: plain">java.lang.ClassFormatError: Absent Code attribute in method that is not native or abstract in class file javax/servlet/http/Cookie</pre>
+
+A google search found <a href="http://www.andrejkoelewijn.com/wp/2010/03/04/absent-code-attribute-in-method-that-is-not-native-or-abstract/">this post</a>, which explains that it is caused by having an interface in the classpath, and not an actual implementation.
+
+In this case it's the java-ee interface.  To fix this I added the jetty servlet api implementation to my pom:
+
+<pre class="brush: xml">
+    <dependency>
+        <groupId>jetty</groupId>
+        <artifactId>javax.servlet</artifactId>
+        <scope>test</scope>
+    </dependency>
+</pre>
+
+Piece of cake.  I have run in to this before, so I figured I would capture the fix here in case I run in to it again.

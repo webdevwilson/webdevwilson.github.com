@@ -1,0 +1,31 @@
+--- 
+layout: post
+title: Graffiti is a Sinatra-inspired Groovy Framework
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1287769796"
+tags: 
+- Developer Tools
+- graffiti
+- groovy
+- http
+- sinatra
+type: post
+status: publish
+---
+Playing around with Sinatra the other day and realized I could really use something like this for Groovy.  Thus, Graffiti was born.  It's basically a thin wrapper around Jetty.  At first, I thought I might write my own server for it (everybody needs to do that once, don't they?), but decided to invoke the <a href="http://c2.com/xp/DoTheSimplestThingThatCouldPossiblyWork.html">'simplest thing that could possibly work' principle</a>.
+
+Here is the requisite 'Hello World' example:
+
+<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushGroovy.js"></script>
+<pre class="brush: groovy">import graffiti.*
+
+@Grab('com.goodercode:graffiti:1.0-SNAPSHOT')
+@Get('/helloworld')
+def hello() {
+  'Hello World'
+}
+
+Graffiti.serve this</pre>
+The code, plus more documentation is hosted under <a href="http://github.com/webdevwilson">my github account</a>.

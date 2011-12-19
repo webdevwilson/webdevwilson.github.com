@@ -1,0 +1,41 @@
+--- 
+layout: post
+title: An easier way to clear your floats with CSS
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1278990639"
+tags: 
+- css
+- html
+- Lessons
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushCss.js"></script><p>If you are doing a lot of CSS-based layouts, it is likely that you have done the following:</p>
+
+<pre class="brush: xml">
+   <div class="i-float-left">
+     some text
+   </div>
+   <div style="clear: both;"></div>
+</pre>
+
+<p></p>
+
+<p>This never really sit well with me.&#160; Recently, I decided to try and find a better way to accomplish this with a CSS class.&#160; In so doing I came across <a href="http://positioniseverything.net/easyclearing.html" target="_blank">this post</a>.&#160; If you want to know a bunch of stuff about why this trick works I suggest you read the post.&#160; I will summarize by saying that this trick uses the :after CSS pseudo-selector which is not currently recognized by IE.&#160; But, conveniently we can make ie execute the behavior by assigning a ‘zoom’ to it.&#160; A css attribute that is ignored by other browsers but makes IE render it differently.&#160; Hear is the css code.</p>
+
+<pre class="brush: css">
+.clearme { zoom: 1; }
+.clearme:after { content: "."; display: block; height: 0; clear: both; visibility: hidden } 
+</pre>
+
+<p>Then, you assign an element to be cleared by adding the ‘clearme’ class.</p>
+
+<pre class="brush: xml">
+  <div class="i-float-left clearme">
+    some text
+  </div>
+</pre>
+
+<p>And everything following will clear the floating div.&#160; I have verified this works in IE 6, IE 7, IE 8, Chrome, Firefox, and Safari (mac).</p>

@@ -1,0 +1,38 @@
+--- 
+layout: post
+title: Disable Select Options in Internet Explorer 7 with JQuery
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1315276917"
+tags: 
+- Developer Tools
+- gotchas
+- html
+- javascript
+- jquery
+- Lessons
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJScript.js"></script><p>I recently found out (unfortunately) that disabling an option with the disabled attribute does not work in IE 7.&#160; Odd.&#160; Here is my workaround using JQuery, it will gray out and disallow selection of all options with a disabled attribute.</p>  
+
+<pre class="brush: js">
+   $(document).ready(function() {
+     $('option[disabled]').css({'color': '#cccccc'});
+     $('select').change(function() {
+       if(this.options[this.selectedIndex].disabled) {
+         if(this.options.length == 0) {
+           this.selectedIndex = -1;
+         } else {
+           this.selectedIndex--;
+         }
+         $(this).trigger('change');
+       }
+     });
+     $('select').each(function(it) {
+       if(this.options[this.selectedIndex].disabled)
+         this.onchange();
+     });
+   });     
+</pre>

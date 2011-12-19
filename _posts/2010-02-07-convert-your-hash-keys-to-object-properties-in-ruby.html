@@ -1,0 +1,58 @@
+--- 
+layout: post
+title: Convert your Hash keys to object properties in Ruby
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1288451587"
+tags: 
+- Developer Tools
+- ruby
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Being a Ruby noob (and having a background in Groovy), I was a little surprised that you can not access hash objects using the dot notation.&#160; I am writing an application that relies heavily on XML and JSON data.&#160; This data will need to be displayed and I would rather use <em>book.author.first_name</em> over <em>book[‘author’][‘first_name’]</em>.&#160; A quick search on google yielded this <a href="http://pullmonkey.com/2008/01/06/convert-a-ruby-hash-into-a-class-object/" target="_blank">post on the subject</a>.</p>  <p>So, taking the DRYOO (Don’t Repeat Yourself Or Others) concept.&#160; I came up with this:</p>  
+
+<pre class="brush: ruby">
+class ::Hash
+  
+  # add keys to hash
+  def to_obj
+    self.each do |k,v|
+      if v.kind_of? Hash
+        v.to_obj
+      end
+      k=k.gsub(/\.|\s|-|\/|\'/, '_').downcase.to_sym
+
+      ## create and initialize an instance variable for this key/value pair
+      self.instance_variable_set("@#{k}", v)
+
+      ## create the getter that returns the instance variable
+      self.class.send(:define_method, k, proc{self.instance_variable_get("@#{k}")})
+
+      ## create the setter that sets the instance variable
+      self.class.send(:define_method, "#{k}=", proc{|v| self.instance_variable_set("@#{k}", v)})
+    end
+    return self
+  end
+end
+</pre>
+<p>This works pretty well.&#160; It converts each of your keys to properties of the Hash.&#160; </p>
+
+<p>However, it doesn’t sit very well with me because I probably will not use 90% of the properties most of the time.&#160; Why should I go through the performance overhead of creating instance variables for all of the unused ones?</p>
+
+<p>Enter the ‘magic method’ #missing_method:</p>
+
+<pre class="brush: ruby">
+class ::Hash
+  def method_missing(name)
+    return self[name] if key? name
+    self.each { |k,v| return v if k.to_s.to_sym == name }
+    super.method_missing name
+  end
+end
+</pre>
+
+<p>This is a much cleaner method for my purposes.&#160; Quite simply, it checks to see if there is a key with the given symbol, and if not, loop through the keys and attempt to find one.</p>
+
+<p>I am a Ruby noob, so if there is something I am overlooking, please let me know.</p>

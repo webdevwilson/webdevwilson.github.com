@@ -1,0 +1,201 @@
+--- 
+layout: post
+title: Sticky Note, A JavaFX Tutorial
+published: true
+meta: 
+  _edit_lock: "1278989638"
+  _edit_last: "1"
+tags: 
+- javafx
+- Lessons
+- tutorial
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJavaFX.js"></script><p><em>JavaFX</em> is Sun’s latest attempt at making an RIA friendly development technology.&#160; It’s aim is to compete with tools such as Adobe Flash/Flex/Air, and Silverlight.&#160; I am not going to do a comparison of these.&#160; Instead, I will focus on my first JavaFX program, Sticky Note.</p>  <p><em>Sticky Note</em> (<a title="Sticky Note JavaFX" href="http://www.goodercode.com/javafx/stickynote/stickynote.jnlp">launch it</a>, <a title="Sticky Note JavaFX Source" href="http://www.goodercode.com/javafx/stickynote/stickynote.fx">dowload source</a>)</a> is intended to mimic the Windows 7 feature, Sticky Notes.&#160; It provides a sticky note that the user can open and type of reminders.&#160; These will be saved and restored between application runs.&#160; For simplicity’s sake, this script will only allow one note.</p>  <p><strong>What will I need to develop a JavaFX application?</strong></p>  <p>All you need to do is <a href="http://www.netbeans.org/downloads/index.html">download the latest Netbeans with JavaFX</a>, and make sure you are running the <a href="http://java.sun.com/javase/downloads/index.jsp">latest version of Java</a>.</p>  <p>In this example, we will be using a few features of JavaFX:</p>  <ul>   <li>Ability to wrap swing components and use them in a JavaFX Application </li>    <li>Simple interface for storing state information on Disk </li>    <li>Variable binding with ‘bind’ and ‘on replace’ operators </li>    <li>Simple API for creating effects, like gradients and drop shadows. </li> </ul>  <p><strong>It don’t mean a thing if it ain’t got that swing.</strong></p>  <p>For this program we will need a multi-line textbox.&#160; Unfortunately, the <a href="http://java.sun.com/javafx/1.2/docs/api/">JavaFX API</a> does not provide this.&#160; So we will need to wrap a swing <a href="http://www.j2ee.me/javase/6/docs/api/javax/swing/JEditorPane.html">JEditorPane</a> for use.&#160; You can do this pretty easily,</p>  
+
+<pre class="brush: javafx">
+def textbox: JEditorPane = new JEditorPane("text/plain","");
+textbox.setBackground(new java.awt.Color(0,0,0,0));
+textbox.setText(text);
+def sbox = SwingComponent.wrap( textbox );
+</pre>
+
+<p>From here, you can easily use it as a normal JavaFX control.</p>
+
+<p><strong>Gotta save state.</strong></p>
+
+<p>JavaFX provides the <a href="http://java.sun.com/javafx/1.2/docs/api/javafx.io/javafx.io.Storage.html">Storage class</a> to easily store &amp; retrieve data.&#160; We use the public-init variable source to set the name of the file to use.&#160; This is relative to the currently running script.</p>
+
+<pre class="brush: javafx">
+var storage = Storage { source: "model.properties" }
+{
+  var resource: Resource = storage.resource;
+  var properties: Properties = new Properties();
+  var inputStream: InputStream;
+  try {
+    inputStream = resource.openInputStream();
+    properties.load(inputStream);
+    text = properties.get("text");
+    noteX = Float.parseFloat(properties.get("screenX"));
+    noteY = Float.parseFloat(properties.get("screenY"));
+    noteWidth = Float.parseFloat(properties.get("width"));
+    noteHeight = Float.parseFloat(properties.get("height"));
+  } catch (e: Exception) {
+    println("Exception in Model.load():{e}");
+    e.printStackTrace();
+  } finally {
+    try {
+      inputStream.close();
+    } catch(e: Exception) {
+      println("Exception closing inputstream {e}");
+    }
+  }
+}
+</pre>
+
+<p>Saving is just the opposite.&#160; We are using the dirtyModel variable to track whether the data has been changed since our last save.&#160; Also, we are unable to bind the <a href="http://www.j2ee.me/javase/6/docs/api/javax/swing/JEditorPane.html">JEditorPane</a> text property, so we have to manually do it.&#160; I also have logic to prevent multiple saves since this method is called asynchronously.</p>
+
+<pre class="brush: javafx">
+// handle model storage
+var dirtyModel: Boolean = false;
+var saveInProgress: Boolean = false;
+function saveModel() {
+
+  // update text
+  if( not text.equals(textbox.getText() ) ) text = textbox.getText();
+
+  // only one save at a time, and only when necessary
+  if( not dirtyModel or saveInProgress ) return;
+
+  saveInProgress = true;
+  var resource : Resource = storage.resource;
+  var properties : Properties = new Properties();
+  properties.put("screenX", "{noteX}");
+  properties.put("screenY", "{noteY}");
+  properties.put("text", text);
+  properties.put("width", "{noteWidth}");
+  properties.put("height", "{noteHeight}");
+  var outputStream : OutputStream;
+  try {
+    outputStream = resource.openOutputStream(true);
+    properties.store(outputStream);
+  } catch (ioe:IOException) {
+    println("IOException saving data:{ioe}");
+  } finally {
+    try {
+      outputStream.close();
+    } catch (ioe: IOException) {
+      println("IOException closing output stream:{ioe}");
+    }
+  }
+  saveInProgress = false;
+  dirtyModel = false;
+}
+  
+</pre>
+
+<p>One thing to note is the usage of brackets inside the quotes when storing in the <a href="http://java.sun.com/javafx/1.2/docs/api/javafx.util/javafx.util.Properties.html">Properties</a> object.&#160; Anything within brackets in a String will be evaluated.&#160; I used this method b/c it is a little cleaner than using toString().</p>
+
+<p><strong>Binding</strong></p>
+
+<p>The most powerful feature of JavaFX is the ability to bind variables and setup triggers.&#160; In this example, we use triggers to monitor whether the model is dirty or not.</p>
+
+<pre class="brush: javafx">
+   // model variables
+   var noteWidth: Float = minWidth on replace { dirtyModel = true };
+   var noteHeight: Float = minHeight on replace { dirtyModel = true };
+   var noteX: Float = 100 on replace { dirtyModel = true };
+   var noteY: Float = 100 on replace { dirtyModel = true };
+   var text = "Click here to write notes" on replace { dirtyModel = true };
+</pre>
+
+<p>You could access the old value if you would like by using the following form:</p>
+
+<pre class="brush: javafx">
+var noteWidth: Float = minWidth on replace oldValue { dirtyModel = true; }
+</pre>
+
+<p>I have also used binding so that components are resized according to the noteWidth variable.&#160; That way all we have to do is set the noteWidth variable and everything will adjust itself accordingly.&#160; </p>
+
+<p>The following example is the code for a rectangle that sits in the lower right corner and handles the resizing of the note.&#160; It demonstrates binding as well as updating of the global variable ‘noteWidth’.</p>
+
+<pre class="brush: javafx">
+  // resize box
+  Rectangle {
+    width: 12
+    height: 12
+    x: bind noteWidth - 12 - dropShadowRadius
+    y: bind noteHeight - 12 - dropShadowRadius
+    fill: Color.TRANSPARENT
+    cursor: Cursor.SE_RESIZE
+    onMouseDragged: function(e : MouseEvent) {
+    
+      if( e.sceneX < minWidth ) { noteWidth = minWidth; }
+      else noteWidth = e.sceneX;
+    
+      if( e.sceneY < minHeight ) { noteHeight = minHeight; }
+      else noteHeight = e.sceneY;
+    
+      setTextboxSize();
+    }
+  }
+</pre>
+
+<p>Note: I have read that <em>bind</em> operators are less performant than using <em>on replace</em> triggers for similar functionality.&#160; I plan to investigate this in the near future.</p>
+
+<p><strong>Graphics &amp; Effects using JavaFX</strong></p>
+
+<p>Effects are easy to achieve in <em>JavaFX</em>.&#160; In this program I used a gradient for the background as well as a drop shadow.</p>
+
+<p>JavaFX Background Gradient using <a href="http://java.sun.com/javafx/1.2/docs/api/javafx.scene.paint/javafx.scene.paint.LinearGradient.html">LinearGradient</a>:</p>
+
+<pre class="brush: javafx">
+   LinearGradient {
+     startX: 0.0, startY: 0.0, endX: 0.0, endY: 1.0
+     stops: [ Stop { offset: 0.0 color: noteColorTop },
+                Stop { offset: 1.0 color: noteColorBottom } ]
+   }
+</pre>
+
+<p>Positional variables must be between 0 and 1 unless proportional is set to false.&#160; In which case, the values are absolute.</p>
+
+<p>JavaFX Drop Shadow using <a href="http://java.sun.com/javafx/1.2/docs/api/javafx.scene.effect/javafx.scene.effect.DropShadow.html">DropShadow</a>:</p>
+
+<pre class="brush: javafx">
+   DropShadow { 
+     radius: dropShadowRadius 
+     offsetY: 3 
+     color: Color.color(0.4, 0.4, 0.4) 
+   }
+</pre>
+
+<p>I am aware of the dragging issues experienced when dragging up and down.&#160; However, I am unable to resolve them (not having much experience in desktop app development).&#160; Let me know if you figure out a way to fix it.</p>
+
+<p>&#160;</p>
+
+<p>You can download the <a href="http://www.goodercode.com/javafx/stickynote/stickynote.fx">source code here</a>, or <a href="http://www.goodercode.com/javafx/stickynote/stickynote.jnlp">run Sticky Note</a>.</p>
+
+<p>&#160;</p>
+
+<p><strong>More JavaFX Resources:</strong></p>
+
+<ul>
+  <li><a href="http://www.javafx.com/">JavaFX Official Site</a> </li>
+
+  <li><a href="http://java.sun.com/javafx/1.2/docs/api/">JavaFX 1.2 API</a> </li>
+
+  <li><a href="http://learnjavafx.typepad.com/">Jim Weaver’s JavaFX Blog</a> </li>
+
+  <li><a href="http://piliq.com/javafx/">The JavaFX Journey Blog</a> </li>
+
+  <li><a href="http://www.ibm.com/developerworks/java/library/j-javafx/?S_TACT=105AGX01&amp;S_CMP=HP">Create RIA with JavaFX</a> </li>
+
+  <li><a href="http://jfx.wikia.com/wiki/Step_by_Step:_How_to_build_your_first_JavaFX_application">How to build your first JavaFX App</a> </li>
+</ul>
+
+<p>&#160;</p>
+
+<p><strong>UPDATE (1/16/2010):</strong></p>
+
+<p>This project is now hosted at github at <a title="http://github.com/webdevwilson/javafx-sticky-notes" href="http://github.com/webdevwilson/javafx-sticky-notes">http://github.com/webdevwilson/javafx-sticky-notes</a></p>

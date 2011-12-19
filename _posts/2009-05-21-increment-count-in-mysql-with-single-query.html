@@ -1,0 +1,46 @@
+--- 
+layout: post
+title: Increment count in MySQL with single query
+published: true
+meta: 
+  _edit_lock: "1278993971"
+  _edit_last: "1"
+tags: 
+- Lessons
+- mysql
+- sql
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushSql.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPhp.js"></script><p>Sometimes I come across a time saver so useful that I feel compelled to share it. </p>  <p>Supposing we are keeping track of stats on our website in a MySQL database with a table of    <br />columns url, month, hits.&#160; To update the hit count we can do this: </p>
+
+<pre class="brush: sql">
+UPDATE `stats` SET `hits` = `hits` + 1 WHERE `url` = '/tips.htm' AND `month` = '6'
+</pre>
+
+<p>Now, this would work as long as we are assured the record exists.&#160; But, we can't be sure it exists. 
+  <br />So we have to do the following: </p>
+
+<pre class="brush: php">
+   $results = query( "SELECT hits FROM `stats` WHERE url = '/tips.htm' AND month = '6'" ); 
+   if( $results->count() == 0 ) { 
+     // do insert 
+     query("INSERT INTO `stats`( `url`, `month`, `hits` ) VALUES ( '/tips.htm', '6', 0 )"); 
+     
+   } else { 
+    
+     // do update 
+     query("UPDATE `stats` SET `hits` = `hits` + 1 WHERE `url` = '/tips.htm' AND `month` = '6'"); 
+   } 
+</pre>
+
+<p></p>
+
+<p>However, this can be done in one query so long as url and month are setup as composite keys, and 
+  <br />hits must default to 1.&#160; With a little setup the next query accomplishes everything in one fail swoop: </p>
+
+<pre class="brush: php">
+query("INSERT INTO `stats`( `url`, `month` ) VALUES ( '/tips.htm', '6' ) ON DUPLICATE KEY UPDATE `hits` = `hits` + 1"); 
+</pre>
+
+<p>Now do something productive with all the time you saved.&#160; Keep in mind that this syntax is valid in MySQL 4.1.0 and later.</p>

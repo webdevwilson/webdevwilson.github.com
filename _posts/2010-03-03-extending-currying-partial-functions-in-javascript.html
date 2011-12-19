@@ -1,0 +1,48 @@
+--- 
+layout: post
+title: "Extending Currying: Partial Functions in Javascript"
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1278790029"
+tags: 
+- javascript
+- Lessons
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJScript.js"></script>Last week I posted about <a href="http://www.goodercode.com/wp/function-currying-in-javascript/" target="_blank">function currying in javascript</a>.  This week I am taking it a step further by adding the ability to call partial functions.
+
+Suppose we have a graphing application that will pull data via Ajax and perform some calculation to update a graph.  Using a method with the signature ‘updateGraph(id,value)’.
+
+To do this, we have do something like this:
+<pre class="brush: js">
+
+for(var i=0; i < things.length; i++) {
+  Ajax.request('/some/data', {id: things[i].id}, function(json) {
+    updateGraph(json.id, json.value);
+  });
+}
+</pre>
+This works fine.  But, using this method we need to return the id in the json response from the server.  This works fine, but is not that elegant and increase network traffic.
+
+Using partial function currying we can bind the id parameter and add the second parameter later (when returning from the asynchronous call).  To do this, we will need the updated curry method.  I have added support for sending additional parameters at runtime for curried methods.
+
+<pre class="brush: js">
+Function.prototype.curry = function(scope) {
+  scope = scope || window;
+  var args = [];
+  for (var i=1, len = arguments.length; i < len; ++i) {
+    args.push(arguments[i]);
+  }
+  var m = this;
+  return function() {
+    for (var i=0, len = arguments.length; i < len; ++i) {
+      args.push(arguments[i]);
+    }
+    return m.apply(scope, args);
+  };
+}
+</pre>
+
+As you can see, partial currying gives is a very useful tool and this simple method should be a part of every developer’s toolbox.

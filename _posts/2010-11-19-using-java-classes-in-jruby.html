@@ -1,0 +1,26 @@
+--- 
+layout: post
+title: Using Java classes in JRuby
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1290201453"
+tags: 
+- java
+- jruby
+- Lessons
+type: post
+status: publish
+---
+I needed to do some reflection today so I fired up interactive JRuby (jirb) to inspect a jar.  Surprisingly, I couldn't remember exactly how to <em>use Java classes in JRuby</em>.  So I did some searching on the internet and found this to be a common question with many answers.  So I figure I will document it here in case I forget how in the future.
+
+Add it's folder to the load path, require it, then use it!
+
+<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script>
+<pre class="brush: ruby">$: &lt;&lt; '/path/to/my/jars/'
+require 'myjar'
+
+# so we don't have to reference it absolutely every time (optional)
+include Java::com.goodercode
+
+my_object = SomeClass.new</pre>

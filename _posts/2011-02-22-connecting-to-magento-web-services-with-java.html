@@ -1,0 +1,36 @@
+--- 
+layout: post
+title: Connecting to Magento Web Services with Java
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1298346628"
+tags: 
+- Developer Tools
+- java
+- magento
+- maven
+- php
+- web services
+type: post
+status: publish
+---
+<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushBash.js"></script> <script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script>
+
+I was in the unenviable position of needing to connect to Magento, a PHP ecommerce platform, web services using Java.  It was kind of difficult to get the classes generated from the WSDL so I figured I would throw the results up on my github account for any other poor sap in a similar position.
+
+First, pull down the project using git:
+<pre class="brush: bash">git clone git://github.com/webdevwilson/magento-java.git</pre>
+and build it with maven:
+<pre class="brush: bash">mvn install</pre>
+Here is a quick example of how to pull an order using the generated classes:
+<pre class="brush: java">MagentoServiceLocator serviceLocator = new MagentoServiceLocator();
+String url = "http://domain.com/index.php/api/v2_soap";
+Mage_Api_Model_Server_V2_HandlerPortType port = serviceLocator.getMage_Api_Model_Server_V2_HandlerPort(url);
+String sessionId = port.login("username", "key");
+SalesOrderEntity salesOrder = port.salesOrderInfo(sessionId, orderId);</pre>
+I also have some wrapper code in there that makes it a little easier to call the API.
+
+Checkout the project at <a href="https://github.com/webdevwilson/magento-java">https://github.com/webdevwilson/magento-java</a>
+
+There is another option. it's called Magja and it is located at <a href="http://code.google.com/p/magja/">google code</a>.

@@ -1,0 +1,71 @@
+--- 
+layout: post
+title: Intercept method calls in Groovy for automatic type conversion
+published: true
+meta: 
+  _edit_lock: "1281041112"
+  _edit_last: "1"
+tags: 
+- groovy
+- java
+- Lessons
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushGroovy.js"></script><p>One of the cooler things you can do with groovy is automatic type conversion.&#160; If you want to convert an object to another type, many times all you have to do is invoke the ‘as’ keyword:</p>  <pre class="brush: groovy">def letters = 'abcdefghijklmnopqrstuvwxyz' as List</pre>
+But, what if you are wanting to do something a little fancier, like converting a String to a Date? 
+
+<pre class="brush: groovy">def christmas = '12-25-2010' as Date
+
+ERROR org.codehaus.groovy.runtime.typehandling.GroovyCastException: Cannot cast object '12-25-2010' with class java.lang.String' to class 'java.util.Date'</pre>
+
+<p>No bueno!</p>
+
+<p>I want to be able to do custom type conversions so that my application can do a simple String to Date conversion. Enter the metaMethod. You can <em>intercept method calls in Groovy</em> using the following method: </p>
+
+<pre class="brush: groovy">def intercept(name, params, closure) {
+  def original = from.metaClass.getMetaMethod(name, params)
+  from.metaClass[name] = { Class clazz -&gt;
+    closure()
+    original.doMethodInvoke(delegate, clazz)
+  }
+}</pre>
+Using this method, and a little syntactic sugar, we create the following 'Convert' class: 
+
+<pre class="brush: groovy">// Convert.from( String ).to( Date ).using { }
+class Convert {
+
+    private from
+
+    private to
+
+    private Convert(clazz) { from = clazz }
+
+    static def from(clazz) {
+        new Convert(clazz)
+    }
+
+    def to(clazz) {
+        to = clazz
+        return this
+    }
+
+    def using(closure) {
+        def originalAsType = from.metaClass.getMetaMethod('asType', [] as Class[])
+        from.metaClass.asType = { Class clazz -&gt;
+            if( clazz == to ) {
+                closure.setProperty('value', delegate)
+                closure(delegate)
+            } else {
+                originalAsType.doMethodInvoke(delegate, clazz)
+            }
+        }
+    }
+}</pre>
+Now, we can make the following statement to add the automatic date conversion: 
+
+<pre class="brush: groovy">Convert.from( String ).to( Date ).using { new java.text.SimpleDateFormat('MM-dd-yyyy').parse(value) }
+
+def christmas = '12-25-2010' as Date</pre>
+Groovy baby!
+

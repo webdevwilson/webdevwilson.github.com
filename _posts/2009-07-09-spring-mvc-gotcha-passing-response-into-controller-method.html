@@ -1,0 +1,58 @@
+--- 
+layout: post
+title: "Spring MVC Gotcha: Passing Response into Controller Method"
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1295379305"
+tags: 
+- java
+- Lessons
+- spring
+- spring mvc
+- web
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I have a confession to make. I created this blog to not only help people out, or opine about industry topics, but as a personal scratch pad for me to help remember stuff. So with that in mind, I am going to take a personal note of a problem I had been dealing with.</p>  <p>Most of us using Spring MVC are familiar with the following:</p>  
+
+<pre class="brush: java">
+   class SomeController {
+      
+     @RequestMapping("/action")
+     public void action(HttpServletRequest request) {
+       // do something
+     }
+   }
+</pre>
+
+<p>Simple, right? Annotation-mapped controller which will use the RequestMapping annotation to determine the viewName. Confused? <a href="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/ch16s11.html#mvc-ann-requestmapping" target="_blank">Check this out</a>. But, what happens when you decide to set a cookie in the action method? For this we will need access to the <a href="http://java.sun.com/javaee/5/docs/api/javax/servlet/http/HttpServletResponse.html" target="_blank">HttpServletResponse</a> object. No problem, since Spring will automagically inject it into our method.</p>
+
+<p>Observe the following:</p>
+
+<pre class="brush: java">
+   class SomeController {
+        
+     @RequestMapping("/action")
+     public void action(HttpServletRequest request, HttpServletResponse response) {
+       // add cookie using response.setCookie(Cookie) method
+     }
+   }
+</pre>
+
+<p>Looks good to me. Only problem is, it will not work (a small problem). Apparently, the Spring Framework assumes you are handling the response if it passes it into a method with a return type of void. This is because there is no good way for it to know if you did or didn’t.</p>
+
+<p>No big deal, we can use a string to prevent this behavior:</p>
+
+<pre class="brush: java">
+   class SomeController {
+        
+     @RequestMapping("/action")
+     public String action(HttpServletRequest request, HttpServletResponse response) {
+       // add cookie using response.setCookie(Cookie) method
+       return "action";
+     }
+   }
+</pre>
+
+<p>This will fix the problem. Consult the documentation <a href="http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/ch16s11.html#mvc-ann-requestmapping" target="_blank">here</a> for more information.</p>

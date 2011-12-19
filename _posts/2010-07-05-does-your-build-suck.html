@@ -1,0 +1,19 @@
+--- 
+layout: post
+title: Does Your Build Suck?
+published: true
+meta: {}
+
+tags: 
+- ant
+- build
+- build antipatterns
+- continuous integration
+- Lessons
+- maven
+- project management
+- rake
+type: post
+status: publish
+---
+<p>I have come up with a few questions you should ask yourself if your build is up to snuff.&#160; </p>  <ul>   <li>Does it take longer than 10 minutes to setup a new computer to build a project?</li>    <li>Are there only a one or two people who know how to completely setup a new computer?</li>    <li>Do builds sometimes fail on the integration server when they are passing on your development machine?</li>    <li>Do you often make cross-repository commits?</li>    <li>Does building a subproject force you to build several other subprojects?</li>    <li>Does it take longer than 2 minutes to checkout a new project and build it successfully?</li>    <li>Is it possible for other developers (or other external factors) to break your development build without checking in code?</li>    <li>Can you use any IDE with your project?</li> </ul>  <p>If you answered yes to any of these questions, perhaps you should spend some time refactoring your build and/or project structure.&#160; A nasty build can be very frustrating for developers yet is an oft overlooked part of development.</p>

@@ -1,0 +1,227 @@
+--- 
+layout: post
+title: Column Priority SQL Server Fulltext Search
+published: true
+meta: 
+  _edit_last: "1"
+  _edit_lock: "1300989709"
+tags: 
+- Lessons
+- sql
+- sql server
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushSql.js"></script><style type="text/css">
+  .csharpcode-wrapper, .csharpcode-wrapper pre {
+  background-color: #f4f4f4;
+  border: solid 1px gray;
+  cursor: text;
+  font-family: Consolas, 'Courier New', Courier, Monospace;
+  font-size: 8pt;
+  line-height: 12pt;
+  margin: 20px 0px 10px 0px;
+  max-height: 200px;
+  overflow: auto;
+  padding: 4px 4px 4px 4px;
+  width: 97.5%;
+}
+.csharpcode-wrapper pre {
+  border-style: none;
+  margin: 0px 0px 0px 0px;
+  overflow: visible;
+  padding: 0px 0px 0px 0px;
+}
+.csharpcode, .csharpcode pre, .csharpcode .alt {
+  background-color: #f4f4f4;
+  border-style: none;
+  color: black;
+  font-family: Consolas, 'Courier New', Courier, Monospace;
+  font-size: 8pt;
+  line-height: 12pt;
+  overflow: visible;
+  padding: 0px 0px 0px 0px;
+  width: 100%;
+}
+.csharpcode pre {
+  margin: 0em;
+}
+.csharpcode .alt {
+  background-color: white;
+}
+.csharpcode .asp {
+  background-color: #ffff00;
+}
+.csharpcode .attr {
+  color: #ff0000;
+}
+.csharpcode .cls {
+  color: #cc6633;
+}
+.csharpcode .html {
+  color: #800000;
+}
+.csharpcode .kwrd {
+  color: #0000ff;
+}
+.csharpcode .lnum {
+  color: #606060;
+}
+.csharpcode .op {
+  color: #0000c0;
+}
+.csharpcode .preproc {
+  color: #cc6633;
+}
+.csharpcode .rem {
+  color: #008000;
+}
+.csharpcode .str {
+  color: #006080;
+}
+</style> <p>I originally posted this on <a href="http://www.allthingswilson.com">allthingswilson.com</a> almost 2 years ago.  However, I find it to be very helpful so I am reposting it here.  I realize that I am not blazing any new trails here, but hopefully someone will find this useful.</p> <p>A client of our’s recently approached us with a simple request, to create a business search which would search keywords on the business’ name and description in our <em>SQL Server</em> database. This was simple enough to achieve, by creating a <em>FULLTEXT</em> index on the table with the appropriate fields ( title, description ) and executing the following query:</p>  
+
+<pre class="brush: sql">
+   SELECT Members.*, SEARCH_TBL.RANK AS rank
+     FROM   Members INNER JOIN
+           FREETEXTTABLE(Members, *, ‘breakfast’) SEARCH_TBL
+               ON Members.memberID = SEARCH_TBL.[KEY]
+    ORDER BY rank DESC
+</pre>
+
+<p>Which yields the following results for the keyword ‘breakfast’:</p>
+
+<table class="db-result-sim csharpcode" border="0" cellspacing="1"><thead>
+    <tr>
+      <th>id</th>
+
+      <th>name</th>
+
+      <th>description</th>
+
+      <th>rank</th>
+    </tr>
+
+    <tr class="asp">
+      <td>23</td>
+
+      <td>Holiday Inn - Downtown</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>276</td>
+    </tr>
+
+    <tr>
+      <td>71</td>
+
+      <td>IHOP</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>220</td>
+    </tr>
+
+    <tr class="alt">
+      <td>2</td>
+
+      <td>Days Inn - North</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>155</td>
+    </tr>
+
+    <tr>
+      <td>43</td>
+
+      <td>Best Breakfast Buffet in Town</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>146</td>
+    </tr>
+  </thead><tbody></tbody></table>
+
+<p>As we can see, these results are unsatisfactory as two businesses appear above ones that should be first. This is due to the fact that these hotels keyword-loaded their description by boasting about their, no doubt, wonderful continental breakfast. Well, we have been there and we have been to the BBBIT and IHOP, and we realize that it is not even a contest as to which one is better. So we would like for the genuine greasy spoon breakfast joints to appear ‘ranked’ above the giant monster mega hotel chains.</p>
+
+<p>Unfortunately, <em>SQL Server</em> has no native way of ‘prioritizing’ columns in a <em>FULLTEXT</em> search clause, that I know of (unlike Karl Hungus, I am not an expert). However, this needed to be done, and I did not want to go messing with the code, so I set about trying to come up with a way to do it in my stored procedure. I suck at <em>T-SQL</em>, but I am pretty good at joining tables, it’s simpler for my simple mind.</p>
+
+<p>Here is the new query:</p>
+
+<pre class="brush: sql">
+   SELECT Members.*,
+           NAME_SRCH.RANK AS rank1, SRCH.RANK AS rank2
+    FROM   Members LEFT OUTER JOIN
+      FREETEXTTABLE(Members, name, ‘breakfast’) NAME_SRCH ON
+        Members.memberID = NAME_SRCH.[KEY] LEFT OUTER JOIN
+      FREETEXTTABLE(Members, *, ‘breakfast’) SRCH ON
+        Members.memberID = SRCH.[KEY]
+   ORDER BY rank1 DESC, rank2 DESC
+</pre>
+
+<p>This query yielded the following result set:</p>
+
+<table class="db-result-sim csharpcode" border="0" cellspacing="1"><thead>
+    <tr>
+      <th>id</th>
+
+      <th>name</th>
+
+      <th>description</th>
+
+      <th>rank1</th>
+
+      <th>rank2</th>
+    </tr>
+
+    <tr>
+      <td>43</td>
+
+      <td>Best Breakfast Buffet in Town</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>265</td>
+
+      <td>146</td>
+    </tr>
+
+    <tr>
+      <td>2</td>
+
+      <td>Cozy Bed &amp; Breakfast</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>265</td>
+
+      <td>120</td>
+    </tr>
+
+    <tr>
+      <td>23</td>
+
+      <td>Holiday Inn - Downtown</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>&lt;NULL&gt;</td>
+
+      <td>276</td>
+    </tr>
+
+    <tr>
+      <td>71</td>
+
+      <td>IHOP</td>
+
+      <td>&lt;Long Text&gt;</td>
+
+      <td>&lt;NULL&gt;</td>
+
+      <td>220</td>
+    </tr>
+  </thead><tbody></tbody></table>
+
+<p>Now you see we have much better results, the Holiday Inn hung in there but we also introduced a new business, Cozy Bed &amp; Breakfast, which I think we can agree is a desirable result for a breakfast search. IHOP still came in after the hotel, because they do not have breakfast in their name. But alas, as we all know by now, outside of Google, no search is perfect.</p>

@@ -1,0 +1,52 @@
+--- 
+layout: post
+title: Build & Install Ruby Gems with Rake
+published: true
+meta: 
+  _edit_lock: "1278790722"
+  _edit_last: "1"
+tags: 
+- Developer Tools
+- gem
+- goodies
+- rake
+- ruby
+type: post
+status: publish
+---
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Are you using rake to build your gems?&#160; Have you ever wished there were an install task to install it to your machine?&#160; I, for one, have written something like this a few times:</p>  
+
+<pre class="brush: ruby">
+
+desc 'Install the gem'
+task :install do
+  exec 'gem install pkg/goodies-0.1.gem'
+end
+
+</pre>
+
+<p>That is pretty straightforward.&#160; However, this will not work under JRuby on Mac where the command should be ‘jgem’.&#160; So we can enhance it to detect the platform, and host OS:</p>
+
+<pre class="brush: ruby">
+
+desc 'Install the gem'
+task :install do
+  executable = RUBY_PLATFORM[/java/] && Config::CONFIG[/darwin/] ? 'jgem' : 'gem'
+  exec "#{executable} install pkg/goodies-0.1.gem"
+end
+
+</pre>
+
+<p>This is a little better.&#160; I am still not comfortable with the sloppiness of building a shell command and executing it though.&#160; It is possible to do it with strictly Ruby.&#160; I am also going namespace it to integrate better with the GemPackageTask.&#160; Now it will be accessed via ‘rake gem:install’</p>
+
+<pre class="brush: ruby">
+
+desc 'Install the gem'
+namespace 'gem' do
+  task :install do
+    Gem::Installer.new('pkg/goodies-0.1.gem').install
+  end
+end
+
+</pre>
+<p>I have included this in the goodies gem 0.2, so go ahead and install it!&#160; ‘gem install goodies’</p>
