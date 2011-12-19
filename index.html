@@ -5,4 +5,5 @@ title: gooder code
 
 {% for post in site.posts limit:1 %}
 <a href="{{ post.url }}">{{ post.title }}</a> >>> <em>Posted on {{ post.date | date_to_long_string }}.</em><br />
+{{ include post.html }}
 {% endfor %}
