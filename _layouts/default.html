@@ -2,11 +2,14 @@
 <html>
   <head>
     <title>goodercode</title>
+    <link rel="stylesheet" href="/resources/css/site.css" />
+    <link href='http://fonts.googleapis.com/css?family=Unna' rel='stylesheet' type='text/css'>
   </head>
   <body>
+      <h1>gooder code</h1>
       <ul>
           {% for post in site.posts %}
-          <li><a href="/goodercode{{ post.url }}">{{ post.title }}</a></li>
+          <li><a href="{{ post.url }}">{{ post.title }}</a></li>
           {% endfor %}
       </ul>
       {{ content }}

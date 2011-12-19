@@ -1,1 +1,5 @@
+_site
+/nbproject/project.properties
+/nbproject/project.xml
 /nbproject/private/
+/_site/nbproject/private/

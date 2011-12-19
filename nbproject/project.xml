@@ -6,6 +6,7 @@
             <name>goodercode</name>
             <source-roots>
                 <root id="src._import.dir" name="Import"/>
+                <root id="src.resources.dir" name="Web Root"/>
                 <root id="src._includes.dir" name="Includes"/>
                 <root id="src._layouts.dir" name="Layouts"/>
                 <root id="src._posts.dir" name="Posts"/>
