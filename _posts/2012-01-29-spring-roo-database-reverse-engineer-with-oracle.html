@@ -15,32 +15,26 @@ tags:
 type: post
 status: publish
 ---
-<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushBash.js"></script>
-<p>So you are trying to <em>reverse engineer an Oracle database with roo</em>?</p>
+So you are trying to <em>reverse engineer an Oracle database with roo</em>?
 
-<p>Unfortunately, due to licensing restrictions with the Oracle JDBC Drivers, this is a little difficult.  There are a few blog posts and forum threads that address the problem but I figured I would post what worked for me here.</p>
+Unfortunately, due to licensing restrictions with the Oracle JDBC Drivers, this is a little difficult.  There are a few blog posts and forum threads that address the problem but I figured I would post what worked for me here.
 
-<p>First, you need to download the <a href="http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html">appropriate Oracle Drivers from Oracle</a>.  The required login, stringent password requirements, nosy registration form, and general system instability made this a pretty painful step for me.  I'd also like to say that companies that have password requirements that don't allow symbols (or any other non-standard requirement) have a special place in my heart.  Having to recover my password every time I go to your site virtually guarantees I will only go there when I absolutely have to (not often).  Anyways, once you have it downloaded you need to install is with maven:</p>
+First, you need to download the <a href="http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html">appropriate Oracle Drivers from Oracle</a>.  The required login, stringent password requirements, nosy registration form, and general system instability made this a pretty painful step for me.  I'd also like to say that companies that have password requirements that don't allow symbols (or any other non-standard requirement) have a special place in my heart.  Having to recover my password every time I go to your site virtually guarantees I will only go there when I absolutely have to (not often).  Anyways, once you have it downloaded you need to install is with maven:
 
-<pre class="brush: bash">
+<pre>
 mvn install:install-file -Dfile=~/Downloads/ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.3 -Dpackaging=jar -DgeneratePom=true
 </pre>
 
 Here comes the fun part.  You need to create an osgi wrapper for the driver to install it in roo.  Otherwise, roo cannot see the driver.  Create a new folder and put the contents of the <a href="https://gist.github.com/1698906">oracle roo addon pom</a> gist I created.  Now build it with maven.  You may want to change some of the artifact ids and dependencies for your particular situation.
 
-<pre class="brush: bash">
+<pre>
 mvn package
 </pre>
 
-No open a roo shell and execute the following command:
+Now open a roo shell and execute the following command:
 
-<pre class="brush: bash">
+<pre>
 osgi install --url file:///Users/me/my-osgi-project/target/the-jar-it-built.jar
-</pre>
-
-Now run (in roo):
-
-<pre class="brush: bash">
 jpa setup --provider HIBERNATE --database ORACLE 
 dependency remove --groupId com.oracle --artifactId ojdbc14 --version 10.2.0.2
 dependency add --groupId com.oracle --artifactId ojdbc6 --version 11.2.0.3
@@ -51,4 +45,4 @@ database properties set --key database.password --value %YOUR_PASSWORD%
 database reverse engineer --schema %YOUR_SCHEMA% --package ~.domain
 </pre>
 
-<p>If you have any package loading exceptions when running the reverse engineer command you can uninstall the osgi bundle, set the package to optional in the osgi pom in the IncludedPackages tag (javax.some.package.*;resolution:=optional) rebuild, then reinstall in roo.</p>
+If you have any package loading exceptions when running the reverse engineer command you can uninstall the osgi bundle, set the package to optional in the osgi pom in the IncludedPackages tag (javax.some.package.*;resolution:=optional) rebuild, then reinstall in roo.

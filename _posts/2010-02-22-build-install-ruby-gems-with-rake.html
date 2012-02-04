@@ -25,7 +25,7 @@ end
 
 </pre>
 
-<p>That is pretty straightforward.&#160; However, this will not work under JRuby on Mac where the command should be ‘jgem’.&#160; So we can enhance it to detect the platform, and host OS:</p>
+<p>That is pretty straightforward.&#160; However, this will not work under JRuby on Mac where the command should be 'jgem'.&#160; So we can enhance it to detect the platform, and host OS:</p>
 
 <pre class="brush: ruby">
 
@@ -37,7 +37,7 @@ end
 
 </pre>
 
-<p>This is a little better.&#160; I am still not comfortable with the sloppiness of building a shell command and executing it though.&#160; It is possible to do it with strictly Ruby.&#160; I am also going namespace it to integrate better with the GemPackageTask.&#160; Now it will be accessed via ‘rake gem:install’</p>
+<p>This is a little better.&#160; I am still not comfortable with the sloppiness of building a shell command and executing it though.&#160; It is possible to do it with strictly Ruby.&#160; I am also going namespace it to integrate better with the GemPackageTask.&#160; Now it will be accessed via 'rake gem:install'</p>
 
 <pre class="brush: ruby">
 
@@ -49,4 +49,4 @@ namespace 'gem' do
 end
 
 </pre>
-<p>I have included this in the goodies gem 0.2, so go ahead and install it!&#160; ‘gem install goodies’</p>
+<p>I have included this in the goodies gem 0.2, so go ahead and install it!&#160; 'gem install goodies'</p>

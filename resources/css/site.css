@@ -1,6 +1,8 @@
-body { font-family: 'Unna', serif; background-color: #fff; }
+body { font-family: 'Unna', serif; background-color: #fff; color: #333; }
 h1 { margin-left: 35px; color: #586e75; font-size: 2em; }
 h2 { color: #657b83; }
-p { color: #93a1a1; }
 
-a:link { color: #b58900; }
+a:link, a:visited { color: #b58900; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+pre { border: 1px solid #ddd; background-color: ghostwhite; padding: 5px; font-weight: bold; font-size: 1.1em; }

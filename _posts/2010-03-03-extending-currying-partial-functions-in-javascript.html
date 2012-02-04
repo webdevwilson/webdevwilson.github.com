@@ -13,7 +13,7 @@ status: publish
 ---
 <script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJScript.js"></script>Last week I posted about <a href="http://www.goodercode.com/wp/function-currying-in-javascript/" target="_blank">function currying in javascript</a>.  This week I am taking it a step further by adding the ability to call partial functions.
 
-Suppose we have a graphing application that will pull data via Ajax and perform some calculation to update a graph.  Using a method with the signature ‘updateGraph(id,value)’.
+Suppose we have a graphing application that will pull data via Ajax and perform some calculation to update a graph.  Using a method with the signature 'updateGraph(id,value)'.
 
 To do this, we have do something like this:
 <pre class="brush: js">
@@ -45,4 +45,4 @@ Function.prototype.curry = function(scope) {
 }
 </pre>
 
-As you can see, partial currying gives is a very useful tool and this simple method should be a part of every developer’s toolbox.
+As you can see, partial currying gives is a very useful tool and this simple method should be a part of every developer's toolbox.

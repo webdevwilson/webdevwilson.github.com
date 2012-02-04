@@ -11,7 +11,7 @@ tags:
 type: post
 status: publish
 ---
-<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I love anything that can be done to clean up source code and make it more readable.&#160; So, when I came upon <a href="http://offthelip.org/?p=56" target="_blank">this post</a>, I was pretty excited.&#160; This is precisely the kind of thing I love.</p>  <p>I have never felt good about ‘file separator’ strings b/c of their ugliness and verbosity.</p>  <p>In Java we have:</p>  
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I love anything that can be done to clean up source code and make it more readable.&#160; So, when I came upon <a href="http://offthelip.org/?p=56" target="_blank">this post</a>, I was pretty excited.&#160; This is precisely the kind of thing I love.</p>  <p>I have never felt good about 'file separator' strings b/c of their ugliness and verbosity.</p>  <p>In Java we have:</p>  
 
 <pre class="brush: java">
 String path = "lib"+File.separator+"etc";
@@ -23,7 +23,7 @@ String path = "lib"+File.separator+"etc";
 path = File.join("lib","etc")
 </pre>
 
-<p>Now, by overloading the ‘/’ operator on a String in Ruby:</p>
+<p>Now, by overloading the '/' operator on a String in Ruby:</p>
 
 <pre class="brush: ruby">
 class ::String

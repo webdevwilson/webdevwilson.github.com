@@ -11,7 +11,7 @@ tags:
 type: post
 status: publish
 ---
-<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Being a Ruby noob (and having a background in Groovy), I was a little surprised that you can not access hash objects using the dot notation.&#160; I am writing an application that relies heavily on XML and JSON data.&#160; This data will need to be displayed and I would rather use <em>book.author.first_name</em> over <em>book[‘author’][‘first_name’]</em>.&#160; A quick search on google yielded this <a href="http://pullmonkey.com/2008/01/06/convert-a-ruby-hash-into-a-class-object/" target="_blank">post on the subject</a>.</p>  <p>So, taking the DRYOO (Don’t Repeat Yourself Or Others) concept.&#160; I came up with this:</p>  
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Being a Ruby noob (and having a background in Groovy), I was a little surprised that you can not access hash objects using the dot notation.&#160; I am writing an application that relies heavily on XML and JSON data.&#160; This data will need to be displayed and I would rather use <em>book.author.first_name</em> over <em>book['author']['first_name']</em>.&#160; A quick search on google yielded this <a href="http://pullmonkey.com/2008/01/06/convert-a-ruby-hash-into-a-class-object/" target="_blank">post on the subject</a>.</p>  <p>So, taking the DRYOO (Don't Repeat Yourself Or Others) concept.&#160; I came up with this:</p>  
 
 <pre class="brush: ruby">
 class ::Hash
@@ -39,9 +39,9 @@ end
 </pre>
 <p>This works pretty well.&#160; It converts each of your keys to properties of the Hash.&#160; </p>
 
-<p>However, it doesn’t sit very well with me because I probably will not use 90% of the properties most of the time.&#160; Why should I go through the performance overhead of creating instance variables for all of the unused ones?</p>
+<p>However, it doesn't sit very well with me because I probably will not use 90% of the properties most of the time.&#160; Why should I go through the performance overhead of creating instance variables for all of the unused ones?</p>
 
-<p>Enter the ‘magic method’ #missing_method:</p>
+<p>Enter the 'magic method' #missing_method:</p>
 
 <pre class="brush: ruby">
 class ::Hash

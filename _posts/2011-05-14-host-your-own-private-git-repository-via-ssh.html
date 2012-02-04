@@ -13,30 +13,18 @@ tags:
 type: post
 status: publish
 ---
-<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushBash.js"></script>
 
 If you are like me you have tons of projects you would like to keep private but track with git, but do not want to pay a git host for a private plan.  One of the problems is that most hosts scale their plans by project instead of users.  Luckily, it is easy to host your own git repositories on any el cheapo host that provides ssh access.
 
 In the interest of full disclosure, I learned this trick from <a href="http://railstips.org/blog/archives/2008/11/23/gitn-your-shared-host-on/">this blog post</a>.  I decided to recreate it in case the source material vanishes for some reason.
 
 To setup your host, login via ssh and run the following commands:
-<pre class="brush: bash">mkdir ~/git/yourprojectname.git
-cd ~/git/yourprojectname.git
-git --bare init</pre>
-Then in your project directory (on your local machine):
-<pre class="brush: bash">
-# setup your user info
-git config --global user.name "Firstname Lastname"
-git config --global user.email "your_email@youremail.com"
 
-# initialize the workspace
-git init
-git add .
-git commit -m "initial commit"
-git remote add origin ssh://youruser@yourhost.com/~/git/yourprojectname.git
-git push origin master</pre>
-It's that easy!
+<div>
+<script src="https://gist.github.com/1739489.js?file=git-ssl.sh"></script>
+</div>
 
+<p>
 To keep from entering your password every time add your public key to the server:
 
 Generate your key with '<em>ssh-keygen -t rsa</em>' on your local machine.  Then add the contents of the generated file to <em>~/.ssh/authorized_keys</em> on your server.

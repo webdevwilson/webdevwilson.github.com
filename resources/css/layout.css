@@ -1,4 +1,4 @@
-#left-column { width: 20%; float: left; }
+#left-column { width: 20%; float: left; list-style: none; }
 #content { width: 75%; float: right; }
 #footer { clear: both; }
 

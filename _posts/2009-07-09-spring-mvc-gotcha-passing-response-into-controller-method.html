@@ -40,7 +40,7 @@ status: publish
    }
 </pre>
 
-<p>Looks good to me. Only problem is, it will not work (a small problem). Apparently, the Spring Framework assumes you are handling the response if it passes it into a method with a return type of void. This is because there is no good way for it to know if you did or didn’t.</p>
+<p>Looks good to me. Only problem is, it will not work (a small problem). Apparently, the Spring Framework assumes you are handling the response if it passes it into a method with a return type of void. This is because there is no good way for it to know if you did or didn't.</p>
 
 <p>No big deal, we can use a string to prevent this behavior:</p>
 

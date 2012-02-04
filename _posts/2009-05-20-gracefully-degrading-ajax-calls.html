@@ -15,40 +15,55 @@ tags:
 type: post
 status: publish
 ---
-<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPhp.js"></script><p>What happens if grandma fires up her Packard Bell and attempts to buy some medicinal ointment from your site in IE 5?&#160; Or, what if one of your 3rd party advertisers (likely story) causes a javascript error?&#160; Will your page still work?&#160; Have you ever thought of what happens when javascript is not running on your fancy AJAX pages?</p>  <p>Not many of us do.&#160; But, it is still important to think about what will happen if javascript is not running in the user’s browser.&#160; Around 5% of user’s have javascript completely turned off.&#160; Still other’s may have security settings which disallow ajax calls or obsolete browser’s which are not supported.&#160; Degrading your javascript gracefully can be tedious and time consuming.&#160;&#160; However, if you follow the pattern that I present it is hardly an inconvenience at all.</p>  <p><strong>Consider the following code:</strong></p>  
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script>
+<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPhp.js"></script>
+<p>What happens if grandma fires up her Packard Bell and attempts to buy some medicinal ointment from 
+    your site in IE 5?&#160; Or, what if one of your 3rd party advertisers (likely story) causes a 
+    javascript error?&#160; Will your page still work?&#160; Have you ever thought of what happens 
+    when javascript is not running on your fancy AJAX pages?</p>  <p>Not many of us do.&#160; But, 
+    it is still important to think about what will happen if javascript is not running in the user's browser.&#160; Around 5% of user's have javascript completely turned off.&#160; Still other's may have security settings which disallow ajax calls or obsolete browser's which are not supported.&#160; Degrading your javascript gracefully can be tedious and time consuming.&#160;&#160; However, if you follow the pattern that I present it is hardly an inconvenience at all.</p>  <p><strong>Consider the following code:</strong></p>  
 
-<pre class="brush: xml">
-   <div class="book">
-     <a href="/book/details" onclick="ajax('/book/details','content'); return false;">Book Details</a>
-   </div>
-   <div id="content"></div>
+<pre>
+   &lt;div class="book"&gt;
+     &lt;a href="/book/details" onclick="ajax('/book/details','content'); return false;"&gt;Book Details&lt;/a&gt;
+   &lt;/div&gt;
+   &lt;div id="content"&gt;&lt;/div&gt;
 </pre>
 
-<p>Pretty simple.&#160; We can see that when the link is clicked an ajax call is made.&#160; The click event returns false, preventing the browser from navigating to the href location.&#160; If Javascript is not running the browser will just navigate to the ‘/book/details’ page.</p>
+<p>Pretty simple.&#160; We can see that when the link is clicked an ajax call is made.&#160; The click 
+    event returns false, preventing the browser from navigating to the href location.&#160; If 
+    Javascript is not running the browser will just navigate to the '/book/details' page.</p>
 
-<p>The next part is where most people might get lost.&#160; But, if you are using a modern <a href="http://www.rabbitphp.org" target="_blank">MVC framework</a> (why wouldn’t you be?), then you should be fine.&#160; Or, at the very least, you should be implementing the view decorator pattern in some form.</p>
+<p>The next part is where most people might get lost.&#160; But, if you are using a modern 
+    <a href="http://www.rabbitphp.org" target="_blank">MVC framework</a> (why wouldn't you be?), 
+    then you should be fine.&#160; Or, at the very least, you should be implementing the view 
+    decorator pattern in some form.</p>
 
-<p>Basically, your controller (or page) should be able to detect whether or not the request was made via AJAX, the XMLHttpRequest object.&#160; Most javascript libraries make this easy by adding a special request header, ‘X-Requested-With’.&#160; If your library does not do this, you should be able to manually add the header.&#160; By checking this header, you can easily determine whether it is AJAX you are dealing with.</p>
+<p>Basically, your controller (or page) should be able to detect whether or not the request was made 
+    via AJAX, the XMLHttpRequest object.&#160; Most javascript libraries make this easy by adding a 
+    special request header, 'X-Requested-With'.&#160; If your library does not do this, you should be 
+    able to manually add the header.&#160; By checking this header, you can easily determine whether 
+    it is AJAX you are dealing with.</p>
 
 <p><strong>In PHP:</strong></p>
 
-<pre class="brush: php">
+<pre>
      
      function isAjax() {
        return $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
      }
      
-     $book = Book->find($id);
+     $book = Book-&gt;find($id);
      
      if( !isAjax() ) {
        include('includes/header.inc');
      }
     
    echo "
-   <div class="book">
-     <h1>${book[title]</h1>
-     <p>${book[description]}</p>
-   </div>
+   &lt;div class="book"&gt;
+     &lt;h1&gt;${book[title]&lt;/h1&gt;
+     &lt;p&gt;${book[description]}&lt;/p&gt;
+   &lt;/div&gt;
   ";
     
     if( !isAjax() ) {
@@ -58,18 +73,18 @@ status: publish
 
 <p>That is pretty straightforward, but the great thing is that most MVC frameworks will do it automatically!&#160; But, what if we want to automatically create our links.&#160; This is easy with the jquery library.&#160; We will create a method that will run when the page loads, and add automatically add the functionality to our links (designated with the ajaxme class).</p>
 
-<pre class="brush: xml">
-   <script type="text/javascript">
+<pre>
+   &lt;script type="text/javascript"&gt;
      $(document).ready($('a.ajaxme').click( function() { 
        var url = $(this).attr('href');
        var div = '#'+$(this).attr('rel');
        $(div).load(url);
      }));
-   </script>
-   <div class="book">
-      <a href="/book/details" class="ajaxme" rel="content">Book Details</a>
-   </div>
-   <div id="content"></div>
+   &lt;/script&gt;
+   &lt;div class="book"&gt;
+      &lt;a href="/book/details" class="ajaxme" rel="content"&gt;Book Details&lt;/a&gt;
+   &lt;/div&gt;
+   &lt;div id="content"&gt;&lt;/div&gt;
 </pre>
 
 <p>Keep in mind there are many situations where it is not possible to gracefully degrade an application.&#160; In these cases a &lt;noscript&gt; tag should be used to warn the user that they are missing out on additional functionality.</p>

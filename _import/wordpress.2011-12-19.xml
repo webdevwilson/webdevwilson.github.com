@@ -277,7 +277,7 @@ Kerry is fluent in many forms of developer communication, including Java, Javasc
 		<description></description>
 		<content:encoded><![CDATA[Welcome to goodercode.com.  I have created this as a resource for web development professionals.  The plan is to post useful tools, and tutorials focusing on coding or web development in general.  Hopefully, these will be useful and enable you make you a more faster coder or at least save you one headache.
 
-In the past, I posting these on my families personal blog (<a href="http://allthingswilson.com">http://allthingswilson.com</a>) but was ridiculed by friends and castigated by my wife.  Seems her family doesn’t speak T-SQL or JSON!  All they speak is pictures of kids and notes of what’s going on.  Who wants to read that?
+In the past, I posting these on my families personal blog (<a href="http://allthingswilson.com">http://allthingswilson.com</a>) but was ridiculed by friends and castigated by my wife.  Seems her family doesn't speak T-SQL or JSON!  All they speak is pictures of kids and notes of what's going on.  Who wants to read that?
 
 Check back in for some great, if not grammatically correct, crap.]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
@@ -343,7 +343,7 @@ Check back in for some great, if not grammatically correct, crap.]]></content:en
          <img alt="" src="http://www.gravatar.com/avatar/d84e369339310ce340ed4f53e5406d08?s=64&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D64&amp;r=G" class="avatar avatar-64 photo" width="64" height="64">       </div>
        
        
-          <p>As Cameo now made famous, “Word UP!” Now, maybe you’ll make time to read David Sidaris.</p>
+          <p>As Cameo now made famous, “Word UP!” Now, maybe you'll make time to read David Sidaris.</p>
           <a id="comment-reply-2" rel="nofollow"></a>
 
       </blockquote>
@@ -441,17 +441,17 @@ I definitely plan on it.  Can you help a brother out and let me 'borry' it?  I p
 .csharpcode .str {
   color: #006080;
 }
-</style> <p>I originally posted this on <a href="http://www.allthingswilson.com">allthingswilson.com</a> almost 2 years ago.  However, I find it to be very helpful so I am reposting it here.  I realize that I am not blazing any new trails here, but hopefully someone will find this useful.</p> <p>A client of our’s recently approached us with a simple request, to create a business search which would search keywords on the business’ name and description in our <em>SQL Server</em> database. This was simple enough to achieve, by creating a <em>FULLTEXT</em> index on the table with the appropriate fields ( title, description ) and executing the following query:</p>  
+</style> <p>I originally posted this on <a href="http://www.allthingswilson.com">allthingswilson.com</a> almost 2 years ago.  However, I find it to be very helpful so I am reposting it here.  I realize that I am not blazing any new trails here, but hopefully someone will find this useful.</p> <p>A client of our's recently approached us with a simple request, to create a business search which would search keywords on the business' name and description in our <em>SQL Server</em> database. This was simple enough to achieve, by creating a <em>FULLTEXT</em> index on the table with the appropriate fields ( title, description ) and executing the following query:</p>  
 
 <pre class="brush: sql">
    SELECT Members.*, SEARCH_TBL.RANK AS rank
      FROM   Members INNER JOIN
-           FREETEXTTABLE(Members, *, ‘breakfast’) SEARCH_TBL
+           FREETEXTTABLE(Members, *, 'breakfast') SEARCH_TBL
                ON Members.memberID = SEARCH_TBL.[KEY]
     ORDER BY rank DESC
 </pre>
 
-<p>Which yields the following results for the keyword ‘breakfast’:</p>
+<p>Which yields the following results for the keyword 'breakfast':</p>
 
 <table class="db-result-sim csharpcode" border="0" cellspacing="1"><thead>
     <tr>
@@ -505,9 +505,9 @@ I definitely plan on it.  Can you help a brother out and let me 'borry' it?  I p
     </tr>
   </thead><tbody></tbody></table>
 
-<p>As we can see, these results are unsatisfactory as two businesses appear above ones that should be first. This is due to the fact that these hotels keyword-loaded their description by boasting about their, no doubt, wonderful continental breakfast. Well, we have been there and we have been to the BBBIT and IHOP, and we realize that it is not even a contest as to which one is better. So we would like for the genuine greasy spoon breakfast joints to appear ‘ranked’ above the giant monster mega hotel chains.</p>
+<p>As we can see, these results are unsatisfactory as two businesses appear above ones that should be first. This is due to the fact that these hotels keyword-loaded their description by boasting about their, no doubt, wonderful continental breakfast. Well, we have been there and we have been to the BBBIT and IHOP, and we realize that it is not even a contest as to which one is better. So we would like for the genuine greasy spoon breakfast joints to appear 'ranked' above the giant monster mega hotel chains.</p>
 
-<p>Unfortunately, <em>SQL Server</em> has no native way of ‘prioritizing’ columns in a <em>FULLTEXT</em> search clause, that I know of (unlike Karl Hungus, I am not an expert). However, this needed to be done, and I did not want to go messing with the code, so I set about trying to come up with a way to do it in my stored procedure. I suck at <em>T-SQL</em>, but I am pretty good at joining tables, it’s simpler for my simple mind.</p>
+<p>Unfortunately, <em>SQL Server</em> has no native way of 'prioritizing' columns in a <em>FULLTEXT</em> search clause, that I know of (unlike Karl Hungus, I am not an expert). However, this needed to be done, and I did not want to go messing with the code, so I set about trying to come up with a way to do it in my stored procedure. I suck at <em>T-SQL</em>, but I am pretty good at joining tables, it's simpler for my simple mind.</p>
 
 <p>Here is the new query:</p>
 
@@ -515,9 +515,9 @@ I definitely plan on it.  Can you help a brother out and let me 'borry' it?  I p
    SELECT Members.*,
            NAME_SRCH.RANK AS rank1, SRCH.RANK AS rank2
     FROM   Members LEFT OUTER JOIN
-      FREETEXTTABLE(Members, name, ‘breakfast’) NAME_SRCH ON
+      FREETEXTTABLE(Members, name, 'breakfast') NAME_SRCH ON
         Members.memberID = NAME_SRCH.[KEY] LEFT OUTER JOIN
-      FREETEXTTABLE(Members, *, ‘breakfast’) SRCH ON
+      FREETEXTTABLE(Members, *, 'breakfast') SRCH ON
         Members.memberID = SRCH.[KEY]
    ORDER BY rank1 DESC, rank2 DESC
 </pre>
@@ -764,7 +764,7 @@ A little late of a reply, but I meant my blog that I coded from scratch.]]></wp:
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=12</guid>
 		<description></description>
-		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPhp.js"></script><p>What happens if grandma fires up her Packard Bell and attempts to buy some medicinal ointment from your site in IE 5?&#160; Or, what if one of your 3rd party advertisers (likely story) causes a javascript error?&#160; Will your page still work?&#160; Have you ever thought of what happens when javascript is not running on your fancy AJAX pages?</p>  <p>Not many of us do.&#160; But, it is still important to think about what will happen if javascript is not running in the user’s browser.&#160; Around 5% of user’s have javascript completely turned off.&#160; Still other’s may have security settings which disallow ajax calls or obsolete browser’s which are not supported.&#160; Degrading your javascript gracefully can be tedious and time consuming.&#160;&#160; However, if you follow the pattern that I present it is hardly an inconvenience at all.</p>  <p><strong>Consider the following code:</strong></p>  
+		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushXml.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushPhp.js"></script><p>What happens if grandma fires up her Packard Bell and attempts to buy some medicinal ointment from your site in IE 5?&#160; Or, what if one of your 3rd party advertisers (likely story) causes a javascript error?&#160; Will your page still work?&#160; Have you ever thought of what happens when javascript is not running on your fancy AJAX pages?</p>  <p>Not many of us do.&#160; But, it is still important to think about what will happen if javascript is not running in the user's browser.&#160; Around 5% of user's have javascript completely turned off.&#160; Still other's may have security settings which disallow ajax calls or obsolete browser's which are not supported.&#160; Degrading your javascript gracefully can be tedious and time consuming.&#160;&#160; However, if you follow the pattern that I present it is hardly an inconvenience at all.</p>  <p><strong>Consider the following code:</strong></p>  
 
 <pre class="brush: xml">
    <div class="book">
@@ -773,11 +773,11 @@ A little late of a reply, but I meant my blog that I coded from scratch.]]></wp:
    <div id="content"></div>
 </pre>
 
-<p>Pretty simple.&#160; We can see that when the link is clicked an ajax call is made.&#160; The click event returns false, preventing the browser from navigating to the href location.&#160; If Javascript is not running the browser will just navigate to the ‘/book/details’ page.</p>
+<p>Pretty simple.&#160; We can see that when the link is clicked an ajax call is made.&#160; The click event returns false, preventing the browser from navigating to the href location.&#160; If Javascript is not running the browser will just navigate to the '/book/details' page.</p>
 
-<p>The next part is where most people might get lost.&#160; But, if you are using a modern <a href="http://www.rabbitphp.org" target="_blank">MVC framework</a> (why wouldn’t you be?), then you should be fine.&#160; Or, at the very least, you should be implementing the view decorator pattern in some form.</p>
+<p>The next part is where most people might get lost.&#160; But, if you are using a modern <a href="http://www.rabbitphp.org" target="_blank">MVC framework</a> (why wouldn't you be?), then you should be fine.&#160; Or, at the very least, you should be implementing the view decorator pattern in some form.</p>
 
-<p>Basically, your controller (or page) should be able to detect whether or not the request was made via AJAX, the XMLHttpRequest object.&#160; Most javascript libraries make this easy by adding a special request header, ‘X-Requested-With’.&#160; If your library does not do this, you should be able to manually add the header.&#160; By checking this header, you can easily determine whether it is AJAX you are dealing with.</p>
+<p>Basically, your controller (or page) should be able to detect whether or not the request was made via AJAX, the XMLHttpRequest object.&#160; Most javascript libraries make this easy by adding a special request header, 'X-Requested-With'.&#160; If your library does not do this, you should be able to manually add the header.&#160; By checking this header, you can easily determine whether it is AJAX you are dealing with.</p>
 
 <p><strong>In PHP:</strong></p>
 
@@ -945,7 +945,7 @@ query("INSERT INTO `stats`( `url`, `month` ) VALUES ( '/tips.htm', '6' ) ON DUPL
          <img alt="" src="http://www.gravatar.com/avatar/ce290cc7db71f32f097d84620438494a?s=64&amp;d=http%3A%2F%2Fwww.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D64&amp;r=G" class="avatar avatar-64 photo" width="64" height="64">       </div>
        
        
-          <p>Very nice, but I haven’t found time to use PHP / MYSQL, since I’d have to do it on my own time.</p>
+          <p>Very nice, but I haven't found time to use PHP / MYSQL, since I'd have to do it on my own time.</p>
           <a id="comment-reply-7" rel="nofollow"></a>
 
       </blockquote>
@@ -1140,14 +1140,14 @@ if ($.browser.msie &amp;&amp; parseFloat($.browser.version) &lt; 8){
 
 <p></p>
 
-<p>This never really sit well with me.&#160; Recently, I decided to try and find a better way to accomplish this with a CSS class.&#160; In so doing I came across <a href="http://positioniseverything.net/easyclearing.html" target="_blank">this post</a>.&#160; If you want to know a bunch of stuff about why this trick works I suggest you read the post.&#160; I will summarize by saying that this trick uses the :after CSS pseudo-selector which is not currently recognized by IE.&#160; But, conveniently we can make ie execute the behavior by assigning a ‘zoom’ to it.&#160; A css attribute that is ignored by other browsers but makes IE render it differently.&#160; Hear is the css code.</p>
+<p>This never really sit well with me.&#160; Recently, I decided to try and find a better way to accomplish this with a CSS class.&#160; In so doing I came across <a href="http://positioniseverything.net/easyclearing.html" target="_blank">this post</a>.&#160; If you want to know a bunch of stuff about why this trick works I suggest you read the post.&#160; I will summarize by saying that this trick uses the :after CSS pseudo-selector which is not currently recognized by IE.&#160; But, conveniently we can make ie execute the behavior by assigning a 'zoom' to it.&#160; A css attribute that is ignored by other browsers but makes IE render it differently.&#160; Hear is the css code.</p>
 
 <pre class="brush: css">
 .clearme { zoom: 1; }
 .clearme:after { content: "."; display: block; height: 0; clear: both; visibility: hidden } 
 </pre>
 
-<p>Then, you assign an element to be cleared by adding the ‘clearme’ class.</p>
+<p>Then, you assign an element to be cleared by adding the 'clearme' class.</p>
 
 <pre class="brush: xml">
   <div class="i-float-left clearme">
@@ -1260,7 +1260,7 @@ if ($.browser.msie &amp;&amp; parseFloat($.browser.version) &lt; 8){
    }
 </pre>
 
-<p>Looks good to me. Only problem is, it will not work (a small problem). Apparently, the Spring Framework assumes you are handling the response if it passes it into a method with a return type of void. This is because there is no good way for it to know if you did or didn’t.</p>
+<p>Looks good to me. Only problem is, it will not work (a small problem). Apparently, the Spring Framework assumes you are handling the response if it passes it into a method with a return type of void. This is because there is no good way for it to know if you did or didn't.</p>
 
 <p>No big deal, we can use a string to prevent this behavior:</p>
 
@@ -1378,7 +1378,7 @@ please help me]]></wp:comment_content>
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=25</guid>
 		<description></description>
-		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJavaFX.js"></script><p><em>JavaFX</em> is Sun’s latest attempt at making an RIA friendly development technology.&#160; It’s aim is to compete with tools such as Adobe Flash/Flex/Air, and Silverlight.&#160; I am not going to do a comparison of these.&#160; Instead, I will focus on my first JavaFX program, Sticky Note.</p>  <p><em>Sticky Note</em> (<a title="Sticky Note JavaFX" href="http://www.goodercode.com/javafx/stickynote/stickynote.jnlp">launch it</a>, <a title="Sticky Note JavaFX Source" href="http://www.goodercode.com/javafx/stickynote/stickynote.fx">dowload source</a>)</a> is intended to mimic the Windows 7 feature, Sticky Notes.&#160; It provides a sticky note that the user can open and type of reminders.&#160; These will be saved and restored between application runs.&#160; For simplicity’s sake, this script will only allow one note.</p>  <p><strong>What will I need to develop a JavaFX application?</strong></p>  <p>All you need to do is <a href="http://www.netbeans.org/downloads/index.html">download the latest Netbeans with JavaFX</a>, and make sure you are running the <a href="http://java.sun.com/javase/downloads/index.jsp">latest version of Java</a>.</p>  <p>In this example, we will be using a few features of JavaFX:</p>  <ul>   <li>Ability to wrap swing components and use them in a JavaFX Application </li>    <li>Simple interface for storing state information on Disk </li>    <li>Variable binding with ‘bind’ and ‘on replace’ operators </li>    <li>Simple API for creating effects, like gradients and drop shadows. </li> </ul>  <p><strong>It don’t mean a thing if it ain’t got that swing.</strong></p>  <p>For this program we will need a multi-line textbox.&#160; Unfortunately, the <a href="http://java.sun.com/javafx/1.2/docs/api/">JavaFX API</a> does not provide this.&#160; So we will need to wrap a swing <a href="http://www.j2ee.me/javase/6/docs/api/javax/swing/JEditorPane.html">JEditorPane</a> for use.&#160; You can do this pretty easily,</p>  
+		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJavaFX.js"></script><p><em>JavaFX</em> is Sun's latest attempt at making an RIA friendly development technology.&#160; It's aim is to compete with tools such as Adobe Flash/Flex/Air, and Silverlight.&#160; I am not going to do a comparison of these.&#160; Instead, I will focus on my first JavaFX program, Sticky Note.</p>  <p><em>Sticky Note</em> (<a title="Sticky Note JavaFX" href="http://www.goodercode.com/javafx/stickynote/stickynote.jnlp">launch it</a>, <a title="Sticky Note JavaFX Source" href="http://www.goodercode.com/javafx/stickynote/stickynote.fx">dowload source</a>)</a> is intended to mimic the Windows 7 feature, Sticky Notes.&#160; It provides a sticky note that the user can open and type of reminders.&#160; These will be saved and restored between application runs.&#160; For simplicity's sake, this script will only allow one note.</p>  <p><strong>What will I need to develop a JavaFX application?</strong></p>  <p>All you need to do is <a href="http://www.netbeans.org/downloads/index.html">download the latest Netbeans with JavaFX</a>, and make sure you are running the <a href="http://java.sun.com/javase/downloads/index.jsp">latest version of Java</a>.</p>  <p>In this example, we will be using a few features of JavaFX:</p>  <ul>   <li>Ability to wrap swing components and use them in a JavaFX Application </li>    <li>Simple interface for storing state information on Disk </li>    <li>Variable binding with 'bind' and 'on replace' operators </li>    <li>Simple API for creating effects, like gradients and drop shadows. </li> </ul>  <p><strong>It don't mean a thing if it ain't got that swing.</strong></p>  <p>For this program we will need a multi-line textbox.&#160; Unfortunately, the <a href="http://java.sun.com/javafx/1.2/docs/api/">JavaFX API</a> does not provide this.&#160; So we will need to wrap a swing <a href="http://www.j2ee.me/javase/6/docs/api/javax/swing/JEditorPane.html">JEditorPane</a> for use.&#160; You can do this pretty easily,</p>  
 
 <pre class="brush: javafx">
 def textbox: JEditorPane = new JEditorPane("text/plain","");
@@ -1484,7 +1484,7 @@ var noteWidth: Float = minWidth on replace oldValue { dirtyModel = true; }
 
 <p>I have also used binding so that components are resized according to the noteWidth variable.&#160; That way all we have to do is set the noteWidth variable and everything will adjust itself accordingly.&#160; </p>
 
-<p>The following example is the code for a rectangle that sits in the lower right corner and handles the resizing of the note.&#160; It demonstrates binding as well as updating of the global variable ‘noteWidth’.</p>
+<p>The following example is the code for a rectangle that sits in the lower right corner and handles the resizing of the note.&#160; It demonstrates binding as well as updating of the global variable 'noteWidth'.</p>
 
 <pre class="brush: javafx">
   // resize box
@@ -1551,7 +1551,7 @@ var noteWidth: Float = minWidth on replace oldValue { dirtyModel = true; }
 
   <li><a href="http://java.sun.com/javafx/1.2/docs/api/">JavaFX 1.2 API</a> </li>
 
-  <li><a href="http://learnjavafx.typepad.com/">Jim Weaver’s JavaFX Blog</a> </li>
+  <li><a href="http://learnjavafx.typepad.com/">Jim Weaver's JavaFX Blog</a> </li>
 
   <li><a href="http://piliq.com/javafx/">The JavaFX Journey Blog</a> </li>
 
@@ -1565,7 +1565,7 @@ var noteWidth: Float = minWidth on replace oldValue { dirtyModel = true; }
 <p><strong>UPDATE (1/16/2010):</strong></p>
 
 <p>This project is now hosted at github at <a title="http://github.com/webdevwilson/javafx-sticky-notes" href="http://github.com/webdevwilson/javafx-sticky-notes">http://github.com/webdevwilson/javafx-sticky-notes</a></p>]]></content:encoded>
-		<excerpt:encoded><![CDATA[JavaFX is Sun’s latest attempt at making an RIA friendly development technology.  It’s aim is to compete with tools such as Adobe Flash/Flex/Air, and Silverlight.  I am not going to do a comparison of these.  Instead, I will focus on my first JavaFX program, Sticky Note.  Sticky Note is intended to mimic the Windows 7 feature, Sticky Notes.  It provides a sticky note that the user can open and type of reminders.  These will be saved and restored between application runs.  For simplicity’s sake, this script will only allow one note.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[JavaFX is Sun's latest attempt at making an RIA friendly development technology.  It's aim is to compete with tools such as Adobe Flash/Flex/Air, and Silverlight.  I am not going to do a comparison of these.  Instead, I will focus on my first JavaFX program, Sticky Note.  Sticky Note is intended to mimic the Windows 7 feature, Sticky Notes.  It provides a sticky note that the user can open and type of reminders.  These will be saved and restored between application runs.  For simplicity's sake, this script will only allow one note.]]></excerpt:encoded>
 		<wp:post_id>25</wp:post_id>
 		<wp:post_date>2009-09-12 06:46:00</wp:post_date>
 		<wp:post_date_gmt>2009-09-12 13:46:00</wp:post_date_gmt>
@@ -1761,7 +1761,7 @@ Ur site contains vey worthful info, i want the sticky note  source code for my b
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=27</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>The <a href="http://en.wikipedia.org/wiki/Front_Controller_pattern">front controller pattern</a> has saved me a ton of time in my recycling efforts.&#160; I started recycling about 2 years ago.&#160; My first procedure was unsatisfactory.&#160; I bought two trash cans, and would put all the trash we identified as recyclable into them.&#160; Once they were full I would take them to the recycling center and put them in the appropriate containers.&#160; The sorting procedure was executed at the facility and everything was sorted at one time.&#160; This was both a time consuming and tedious procedure (kinda gross too).</p>  <p>Enter the front controller pattern…</p>  <p>I decided to buy separate containers and sort trash on the fly.&#160; By moving the sorting procedure to the ‘front’ of the process, I was able to save time and effort.&#160; Now I spend about 5 minutes at the facility and don’t have to handle any stinky trash.&#160; From time to time I see a person who is sorting at the facility.&#160; If only they knew how easy it was to implement the front controller.</p>  <p><em><strong>Design Patterns for Everyday Living</strong> is a regular feature that describes how we can apply software design principles to our daily life.&#160; Saving time, increasing productivity, and gaining a better understanding of their use in the software world.</em></p>  <p><a href="/wp/?cat=22">View more Design Patterns for Everyday Living</a></p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>The <a href="http://en.wikipedia.org/wiki/Front_Controller_pattern">front controller pattern</a> has saved me a ton of time in my recycling efforts.&#160; I started recycling about 2 years ago.&#160; My first procedure was unsatisfactory.&#160; I bought two trash cans, and would put all the trash we identified as recyclable into them.&#160; Once they were full I would take them to the recycling center and put them in the appropriate containers.&#160; The sorting procedure was executed at the facility and everything was sorted at one time.&#160; This was both a time consuming and tedious procedure (kinda gross too).</p>  <p>Enter the front controller pattern…</p>  <p>I decided to buy separate containers and sort trash on the fly.&#160; By moving the sorting procedure to the 'front' of the process, I was able to save time and effort.&#160; Now I spend about 5 minutes at the facility and don't have to handle any stinky trash.&#160; From time to time I see a person who is sorting at the facility.&#160; If only they knew how easy it was to implement the front controller.</p>  <p><em><strong>Design Patterns for Everyday Living</strong> is a regular feature that describes how we can apply software design principles to our daily life.&#160; Saving time, increasing productivity, and gaining a better understanding of their use in the software world.</em></p>  <p><a href="/wp/?cat=22">View more Design Patterns for Everyday Living</a></p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[The front controller pattern has saved me a ton of time in my recycling efforts.]]></excerpt:encoded>
 		<wp:post_id>27</wp:post_id>
 		<wp:post_date>2009-09-17 06:22:00</wp:post_date>
@@ -1792,7 +1792,7 @@ Ur site contains vey worthful info, i want the sticky note  source code for my b
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=31</guid>
 		<description></description>
-		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Being a Ruby noob (and having a background in Groovy), I was a little surprised that you can not access hash objects using the dot notation.&#160; I am writing an application that relies heavily on XML and JSON data.&#160; This data will need to be displayed and I would rather use <em>book.author.first_name</em> over <em>book[‘author’][‘first_name’]</em>.&#160; A quick search on google yielded this <a href="http://pullmonkey.com/2008/01/06/convert-a-ruby-hash-into-a-class-object/" target="_blank">post on the subject</a>.</p>  <p>So, taking the DRYOO (Don’t Repeat Yourself Or Others) concept.&#160; I came up with this:</p>  
+		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><p>Being a Ruby noob (and having a background in Groovy), I was a little surprised that you can not access hash objects using the dot notation.&#160; I am writing an application that relies heavily on XML and JSON data.&#160; This data will need to be displayed and I would rather use <em>book.author.first_name</em> over <em>book['author']['first_name']</em>.&#160; A quick search on google yielded this <a href="http://pullmonkey.com/2008/01/06/convert-a-ruby-hash-into-a-class-object/" target="_blank">post on the subject</a>.</p>  <p>So, taking the DRYOO (Don't Repeat Yourself Or Others) concept.&#160; I came up with this:</p>  
 
 <pre class="brush: ruby">
 class ::Hash
@@ -1820,9 +1820,9 @@ end
 </pre>
 <p>This works pretty well.&#160; It converts each of your keys to properties of the Hash.&#160; </p>
 
-<p>However, it doesn’t sit very well with me because I probably will not use 90% of the properties most of the time.&#160; Why should I go through the performance overhead of creating instance variables for all of the unused ones?</p>
+<p>However, it doesn't sit very well with me because I probably will not use 90% of the properties most of the time.&#160; Why should I go through the performance overhead of creating instance variables for all of the unused ones?</p>
 
-<p>Enter the ‘magic method’ #missing_method:</p>
+<p>Enter the 'magic method' #missing_method:</p>
 
 <pre class="brush: ruby">
 class ::Hash
@@ -2085,7 +2085,7 @@ return self[name] if key? name]]></wp:comment_content>
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=33</guid>
 		<description></description>
-		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I love anything that can be done to clean up source code and make it more readable.&#160; So, when I came upon <a href="http://offthelip.org/?p=56" target="_blank">this post</a>, I was pretty excited.&#160; This is precisely the kind of thing I love.</p>  <p>I have never felt good about ‘file separator’ strings b/c of their ugliness and verbosity.</p>  <p>In Java we have:</p>  
+		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushRuby.js"></script><script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script><p>I love anything that can be done to clean up source code and make it more readable.&#160; So, when I came upon <a href="http://offthelip.org/?p=56" target="_blank">this post</a>, I was pretty excited.&#160; This is precisely the kind of thing I love.</p>  <p>I have never felt good about 'file separator' strings b/c of their ugliness and verbosity.</p>  <p>In Java we have:</p>  
 
 <pre class="brush: java">
 String path = "lib"+File.separator+"etc";
@@ -2097,7 +2097,7 @@ String path = "lib"+File.separator+"etc";
 path = File.join("lib","etc")
 </pre>
 
-<p>Now, by overloading the ‘/’ operator on a String in Ruby:</p>
+<p>Now, by overloading the '/' operator on a String in Ruby:</p>
 
 <pre class="brush: ruby">
 class ::String
@@ -2205,7 +2205,7 @@ I have plans in the future to release Java libraries as well, stay tuned....]]><
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=35</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>I have decided to publish all my Ruby tools via a gem called ‘goodies’.&#160; </p>  <p>To install this gem simply type ‘<strong>gem install goodies’</strong>.</p>  <p>The source is hosted on <a href="http://www.github.com/webdevwilson" target="_blank">GitHub</a>.&#160; The first version (0.1) has the Hash object accessors and the String file path utility methods discussed in the previous two posts.</p>  <p>Enjoy!</p>  <p>&#160;</p>  <p><a href="http://github.com/webdevwilson/Ruby-Goodies" target="_blank">Ruby Goodies @ GitHub</a>     <br /><a href="http://gemcutter.org/gems/goodies" target="_blank">Goodies on gemcutter.org</a></p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>I have decided to publish all my Ruby tools via a gem called 'goodies'.&#160; </p>  <p>To install this gem simply type '<strong>gem install goodies'</strong>.</p>  <p>The source is hosted on <a href="http://www.github.com/webdevwilson" target="_blank">GitHub</a>.&#160; The first version (0.1) has the Hash object accessors and the String file path utility methods discussed in the previous two posts.</p>  <p>Enjoy!</p>  <p>&#160;</p>  <p><a href="http://github.com/webdevwilson/Ruby-Goodies" target="_blank">Ruby Goodies @ GitHub</a>     <br /><a href="http://gemcutter.org/gems/goodies" target="_blank">Goodies on gemcutter.org</a></p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>35</wp:post_id>
 		<wp:post_date>2010-02-16 07:43:00</wp:post_date>
@@ -2259,7 +2259,7 @@ end
 
 </pre>
 
-<p>That is pretty straightforward.&#160; However, this will not work under JRuby on Mac where the command should be ‘jgem’.&#160; So we can enhance it to detect the platform, and host OS:</p>
+<p>That is pretty straightforward.&#160; However, this will not work under JRuby on Mac where the command should be 'jgem'.&#160; So we can enhance it to detect the platform, and host OS:</p>
 
 <pre class="brush: ruby">
 
@@ -2271,7 +2271,7 @@ end
 
 </pre>
 
-<p>This is a little better.&#160; I am still not comfortable with the sloppiness of building a shell command and executing it though.&#160; It is possible to do it with strictly Ruby.&#160; I am also going namespace it to integrate better with the GemPackageTask.&#160; Now it will be accessed via ‘rake gem:install’</p>
+<p>This is a little better.&#160; I am still not comfortable with the sloppiness of building a shell command and executing it though.&#160; It is possible to do it with strictly Ruby.&#160; I am also going namespace it to integrate better with the GemPackageTask.&#160; Now it will be accessed via 'rake gem:install'</p>
 
 <pre class="brush: ruby">
 
@@ -2283,7 +2283,7 @@ namespace 'gem' do
 end
 
 </pre>
-<p>I have included this in the goodies gem 0.2, so go ahead and install it!&#160; ‘gem install goodies’</p>]]></content:encoded>
+<p>I have included this in the goodies gem 0.2, so go ahead and install it!&#160; 'gem install goodies'</p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[Are you using rake to build your gems?  Have you ever wished there were an install task to install it to your machine?]]></excerpt:encoded>
 		<wp:post_id>46</wp:post_id>
 		<wp:post_date>2010-02-22 08:09:00</wp:post_date>
@@ -2326,7 +2326,7 @@ end
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=47</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>Though it may be old news for people following JavaFX closely, I have just run across the JavaFX application on the Winter Olympics website.&#160; Slick transitions and useful data make this a great example of what JavaFX can do.&#160; I think it’s really cool that you can look at past olympics as well as the current year.</p>  <p>Maybe this will help generate a little buzz around JavaFX.</p>  <p><a href="http://www.vancouver2010.com/olympic-medals/geo-view/" target="_blank">Check out the application on vancouver2010.com</a></p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>Though it may be old news for people following JavaFX closely, I have just run across the JavaFX application on the Winter Olympics website.&#160; Slick transitions and useful data make this a great example of what JavaFX can do.&#160; I think it's really cool that you can look at past olympics as well as the current year.</p>  <p>Maybe this will help generate a little buzz around JavaFX.</p>  <p><a href="http://www.vancouver2010.com/olympic-medals/geo-view/" target="_blank">Check out the application on vancouver2010.com</a></p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>47</wp:post_id>
 		<wp:post_date>2010-02-23 08:20:00</wp:post_date>
@@ -2425,7 +2425,7 @@ Function.prototype.curry = function(scope) {
 
 </pre>
 
-<p>This function creates a wrapper around the function and ‘locks in’ the method parameters.&#160; The first parameter is the scope of the function call (usually this or window).&#160; Any remaining parameters will be passed to the method call.&#160; Using the curry method the above call changes to:</p>
+<p>This function creates a wrapper around the function and 'locks in' the method parameters.&#160; The first parameter is the scope of the function call (usually this or window).&#160; Any remaining parameters will be passed to the method call.&#160; Using the curry method the above call changes to:</p>
 
 <pre class="brush: js">
 
@@ -2508,7 +2508,7 @@ Ajax.request('/my/url', {'myParam': paramVal}, myCallback.curry(window, paramVal
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=49</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>In case you haven’t heard, the next version of JRuby will provide native support for Ant.&#160; Much like <a href="http://antwrap.rubyforge.org/" target="_blank">antwrap</a>, you will be able to call ant tasks straight from Ruby.&#160; There are some pretty good examples <a href="http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/" target="_blank">here</a>, but no examples of how to get it running on your machine today.</p>  <ol>   <li>First, you will need to install <a href="http://git-scm.com/" target="_blank">Git SCM</a> </li>    <li>Next, create a directory, JRuby on your machine </li>    <li>CD to that directory, and run ‘git init’ </li>    <li>Next, run ‘git pull git://github.com/jruby/jruby.git’ </li>    <li>Once it has finished downloading, you can run ‘ant’ to build it</li>    <li>Now, just use the executable jar under bin to run the latest version of JRuby</li> </ol>  <p>Now get started converting those nasty ant builds to rake.</p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>In case you haven't heard, the next version of JRuby will provide native support for Ant.&#160; Much like <a href="http://antwrap.rubyforge.org/" target="_blank">antwrap</a>, you will be able to call ant tasks straight from Ruby.&#160; There are some pretty good examples <a href="http://www.engineyard.com/blog/2010/rake-and-ant-together-a-pick-it-n-stick-it-approach/" target="_blank">here</a>, but no examples of how to get it running on your machine today.</p>  <ol>   <li>First, you will need to install <a href="http://git-scm.com/" target="_blank">Git SCM</a> </li>    <li>Next, create a directory, JRuby on your machine </li>    <li>CD to that directory, and run 'git init' </li>    <li>Next, run 'git pull git://github.com/jruby/jruby.git' </li>    <li>Once it has finished downloading, you can run 'ant' to build it</li>    <li>Now, just use the executable jar under bin to run the latest version of JRuby</li> </ol>  <p>Now get started converting those nasty ant builds to rake.</p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>49</wp:post_id>
 		<wp:post_date>2010-02-25 09:01:00</wp:post_date>
@@ -2644,7 +2644,7 @@ Ajax.request('/my/url', {'myParam': paramVal}, myCallback.curry(window, paramVal
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/?p=54</guid>
 		<description></description>
-		<content:encoded><![CDATA[I am going to post about something I don’t post about a lot, the business side of development.  Scott at the antipimp does a good job of explaining <a href="http://theantipimp.com/?p=1678" target="_blank">how contracts work</a> from a business perspective.  I am going to give a view from the ground.
+		<content:encoded><![CDATA[I am going to post about something I don't post about a lot, the business side of development.  Scott at the antipimp does a good job of explaining <a href="http://theantipimp.com/?p=1678" target="_blank">how contracts work</a> from a business perspective.  I am going to give a view from the ground.
 
 First, a little background on myself.  I have recently taken a 6 month contract after about 8 years of fulltime employment.  I have 2 kids, and a stay at home wife.  I took this contract opportunity because I wanted to try it on for size.  I have always wondered whether I would like doing contracts over fulltime employment.  So, in keeping with the theme of this blog I will write this down now so that I may reference it later.
 <ol>
@@ -2653,11 +2653,11 @@ First, a little background on myself.  I have recently taken a 6 month contract
 	<li><strong>Networking</strong>
 I find it extremely gratifying getting to know people.  It is especially beneficial when moving to a new city.  What better way to go out and meet people in your field than to work a few contracts?  6 months of working beside someone and you get to know them pretty well.  This is one of my favorite aspects.</li>
 	<li><strong>Technical Agility</strong>
-Moving between IS shops takes (or molds you into) a flexible person.  You have to be able to go in and hit the ground running.  This means you need to be able to sit down and start work on a large codebase working in a language that you may or may not have that much experience in.  It is also an excellent way to learn new languages and broaden your technical skill set.  I took my current position to learn Ruby.  A month ago, I had only used it in passing, but now I am using it every day.  It’s a tragedy in this field when people start coding for the joy and love of coding, then become deeply entrenched in their companies methods and technologies that it becomes a just a job.</li>
+Moving between IS shops takes (or molds you into) a flexible person.  You have to be able to go in and hit the ground running.  This means you need to be able to sit down and start work on a large codebase working in a language that you may or may not have that much experience in.  It is also an excellent way to learn new languages and broaden your technical skill set.  I took my current position to learn Ruby.  A month ago, I had only used it in passing, but now I am using it every day.  It's a tragedy in this field when people start coding for the joy and love of coding, then become deeply entrenched in their companies methods and technologies that it becomes a just a job.</li>
 	<li><strong>Less Stress</strong>
-I am not talking about the kind of stress you get from a jackass boss.  I am talking about the kind of stress I (or others) experience about planning and future proofing your code.  Not saying I stay up at night worrying whether we have done it right, if that code I wrote today is going to bite me later, but it still creeps around in the dark recesses of my mind.  Careful though, I am not suggesting you write sloppy code; just defer any large architectural or design decisions to the ‘code owners’.</li>
+I am not talking about the kind of stress you get from a jackass boss.  I am talking about the kind of stress I (or others) experience about planning and future proofing your code.  Not saying I stay up at night worrying whether we have done it right, if that code I wrote today is going to bite me later, but it still creeps around in the dark recesses of my mind.  Careful though, I am not suggesting you write sloppy code; just defer any large architectural or design decisions to the 'code owners'.</li>
 	<li><strong>Flexible Scheduling
-</strong>It makes me very happy to be able to cut out a few hours early on a Friday (provided the work is done) and start the weekend off early by going to the pool, or taking the kids to the park.  Contracting provides you this opportunity (mileage may vary).  Most of your fulltime brethren will not care, they will be jealous that they’re corporate policy prevents them from doing the same.  However, you must be mindful of situations where this is not appropriate, and don’t over do it.  You are there to work after all.</li>
+</strong>It makes me very happy to be able to cut out a few hours early on a Friday (provided the work is done) and start the weekend off early by going to the pool, or taking the kids to the park.  Contracting provides you this opportunity (mileage may vary).  Most of your fulltime brethren will not care, they will be jealous that they're corporate policy prevents them from doing the same.  However, you must be mindful of situations where this is not appropriate, and don't over do it.  You are there to work after all.</li>
 	<li><strong>Affirmation of Need</strong>
 Have you ever been stuck in a job where you thought you were underpaid?  Have you ever been in a position where you felt like there was not enough workload for you?  This is not a problem for contractors.  When you start a contract it is understood that you are needed, and the employer knows that you are happy with the terms.</li>
 </ol>
@@ -2702,7 +2702,7 @@ Contracting may not be for everyone.  But, if you develop a relationship with a
 		<description></description>
 		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJScript.js"></script>Last week I posted about <a href="http://www.goodercode.com/wp/function-currying-in-javascript/" target="_blank">function currying in javascript</a>.  This week I am taking it a step further by adding the ability to call partial functions.
 
-Suppose we have a graphing application that will pull data via Ajax and perform some calculation to update a graph.  Using a method with the signature ‘updateGraph(id,value)’.
+Suppose we have a graphing application that will pull data via Ajax and perform some calculation to update a graph.  Using a method with the signature 'updateGraph(id,value)'.
 
 To do this, we have do something like this:
 <pre class="brush: js">
@@ -2734,7 +2734,7 @@ Function.prototype.curry = function(scope) {
 }
 </pre>
 
-As you can see, partial currying gives is a very useful tool and this simple method should be a part of every developer’s toolbox.]]></content:encoded>
+As you can see, partial currying gives is a very useful tool and this simple method should be a part of every developer's toolbox.]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>60</wp:post_id>
 		<wp:post_date>2010-03-03 07:00:44</wp:post_date>
@@ -4015,7 +4015,7 @@ I put my two lines above the cuke4duke lines, so it first installed cucumber gem
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/quit-your-shitty-job/</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>As a developer, what happens when you are running late on a deadline?&#160; Do you work late for more pay?&#160; Do you get chewed out?&#160; What happens if a feature fails to deliver the business value that was expected?&#160; Is it your responsibility?</p>  <p>Too often in the software development industry this is the case.&#160; Developers are not given the respect afforded other professionals.&#160; Instead, there is a perception that they are underperforming, lacking skills, or irresponsible.&#160; There is no concept of total team effort.</p>  <p>What is total team effort?</p>  <p>What if, instead of blaming the developers, missed deadlines are the result of a failure in planning, or a lack of resources?&#160; The failure needs to be identified, and corrected in a respectful manner.&#160; Only then can you take corrective measures to insure it doesn’t happen again.&#160; Does your company have a process for regularly analyzing workflow?&#160; </p>  <p>I recently had a job interview with a company where the representative practically bragged about making their developers work long hours under duress.&#160; This is not an environment I care to subject myself to.&#160; Nor would any other talented developers that I know.&#160; Who suffers?&#160; The business suffers.&#160; Product development suffers.&#160; When we fail to deliver value to the business on a regular basis, they start to question our worth.&#160; It’s a cyclical, self-feeding trend.&#160; One that I don’t want to be a part of, and you shouldn’t either.</p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>As a developer, what happens when you are running late on a deadline?&#160; Do you work late for more pay?&#160; Do you get chewed out?&#160; What happens if a feature fails to deliver the business value that was expected?&#160; Is it your responsibility?</p>  <p>Too often in the software development industry this is the case.&#160; Developers are not given the respect afforded other professionals.&#160; Instead, there is a perception that they are underperforming, lacking skills, or irresponsible.&#160; There is no concept of total team effort.</p>  <p>What is total team effort?</p>  <p>What if, instead of blaming the developers, missed deadlines are the result of a failure in planning, or a lack of resources?&#160; The failure needs to be identified, and corrected in a respectful manner.&#160; Only then can you take corrective measures to insure it doesn't happen again.&#160; Does your company have a process for regularly analyzing workflow?&#160; </p>  <p>I recently had a job interview with a company where the representative practically bragged about making their developers work long hours under duress.&#160; This is not an environment I care to subject myself to.&#160; Nor would any other talented developers that I know.&#160; Who suffers?&#160; The business suffers.&#160; Product development suffers.&#160; When we fail to deliver value to the business on a regular basis, they start to question our worth.&#160; It's a cyclical, self-feeding trend.&#160; One that I don't want to be a part of, and you shouldn't either.</p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[As a developer, what happens when you are running late on a deadline?  Do you work late for more pay?  Do you get chewed out?  What happens if a feature fails to deliver the business value that was expected?  Is it your responsibility?]]></excerpt:encoded>
 		<wp:post_id>82</wp:post_id>
 		<wp:post_date>2010-07-14 08:41:00</wp:post_date>
@@ -4125,7 +4125,7 @@ Is there any way software engineers could be considered as professionals? Perhap
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/subscribe-to-gooder-code-via-email/</guid>
 		<description></description>
-		<content:encoded><![CDATA[<p>I have added a new feature to the blog.&#160; Email subscriptions!&#160; </p>  <p>If you signup using the form on the right rail, you will receive email notifications when I make a new post.&#160; These are delivered by Feedburner.&#160; So signup, it’s fast, and convenient.</p>  <p>And if you are reading this post in your email reader, thanks for signing up!</p>]]></content:encoded>
+		<content:encoded><![CDATA[<p>I have added a new feature to the blog.&#160; Email subscriptions!&#160; </p>  <p>If you signup using the form on the right rail, you will receive email notifications when I make a new post.&#160; These are delivered by Feedburner.&#160; So signup, it's fast, and convenient.</p>  <p>And if you are reading this post in your email reader, thanks for signing up!</p>]]></content:encoded>
 		<excerpt:encoded><![CDATA[]]></excerpt:encoded>
 		<wp:post_id>108</wp:post_id>
 		<wp:post_date>2010-07-19 06:52:00</wp:post_date>
@@ -4483,7 +4483,7 @@ http://legalusdrugstore.com/products/lasix.htm starting salary for pharmacy degr
 
 		<guid isPermaLink="false">http://www.goodercode.com/wp/intercept-method-calls-groovy-type-conversion/</guid>
 		<description></description>
-		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushGroovy.js"></script><p>One of the cooler things you can do with groovy is automatic type conversion.&#160; If you want to convert an object to another type, many times all you have to do is invoke the ‘as’ keyword:</p>  <pre class="brush: groovy">def letters = 'abcdefghijklmnopqrstuvwxyz' as List</pre>
+		<content:encoded><![CDATA[<script language="javascript" src="/js/syntaxhighlighter_2.1.364/scripts/shBrushGroovy.js"></script><p>One of the cooler things you can do with groovy is automatic type conversion.&#160; If you want to convert an object to another type, many times all you have to do is invoke the 'as' keyword:</p>  <pre class="brush: groovy">def letters = 'abcdefghijklmnopqrstuvwxyz' as List</pre>
 But, what if you are wanting to do something a little fancier, like converting a String to a Date? 
 
 <pre class="brush: groovy">def christmas = '12-25-2010' as Date

@@ -17,44 +17,14 @@ The project is located at <a href="https://github.com/chrsan/css-selectors">http
 
 In any case, you can use it like so:
 
-<script src="/js/syntaxhighlighter_2.1.364/scripts/shBrushJava.js"></script>
-<pre class="brush: java">    // from HtmlUnit getting started
-    final WebClient webClient = new WebClient();
-    final HtmlPage page = webClient.getPage("http://htmlunit.sourceforge.net");
-    final DOMNodeSelector cssSelector = new DOMNodeSelector(page.getDocumentElement());
-    final Set elements = cssSelector.querySelectorAll("div.section h2");
-    final Node first = elements.iterator().next();
+<script src="https://gist.github.com/1739887.js?file=html-unit-getting-started.java"></script>
 
-    assertThat(first.getTextContent(), equalTo("HtmlUnit"));</pre>
 The only problem here is that the querySelectAll returns a Set&lt;Node&gt;.  Not HtmlElement like we may want in some cases.   However, if you were to reflect on the Set, you would find that it is indeed a Set of HtmlElement objects.
 
 Typically, I like to create a base class for my web tests.  Just for fun, I am using the $ method similar to <a href="http://jquery.com/">jQuery</a>.
-<pre class="brush: java">public class WebTestBase {
-
-    protected WebClient webClient;
-
-    protected HtmlPage htmlPage;
-
-    protected void goTo(final String url){
-        return (HtmlPage)webClient.getPage(url);
-    }
-
-    protected List $(final String cssSelector) {
-
-        final DOMNodeSelector cssSelector = new DOMNodeSelector(htmlPage.getDocumentElement());
-        final Set nodes = cssSelector.querySelectorAll("div.section h2");
-
-        // for some reason Set cannot be cast to Set?
-        final List elements = new ArrayList(nodes.size());
-        for (final Node node : nodes) {
-            elements.add((HtmlElement)node);
-        }
-
-        return elements;
-    }
-}</pre>
+<script src="https://gist.github.com/1739459.js?file=WebTestBase.java"></script>
 Now we can write tests like this:
-<pre class="brush: java">public class LoginWebTest extends WebTestBase {
+<pre>public class LoginWebTest extends WebTestBase {
 
     @Test
     public void login_page_has_instructions() throws Exception {
