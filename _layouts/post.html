@@ -3,8 +3,8 @@ layout: default
 blog: true
 ---
 <header>
-    <h2>{{ post.title }}</h2>
-    <span>{{ post.date }}</span>
+    <h2>{{ page.title }}</h2>
+    <span>{{ page.date | date_to_string }}</span>
 </header>
 <article>
     <div>

@@ -4,14 +4,16 @@
     <title>goodercode</title>
     <link rel="stylesheet" href="/resources/css/site.css" />
     <link href='http://fonts.googleapis.com/css?family=Unna' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/resources/css/layout.css" />
   </head>
   <body>
       <h1>gooder code</h1>
-      <ul>
+      <ul id="left-column">
           {% for post in site.posts %}
           <li><a href="{{ post.url }}">{{ post.title }}</a></li>
           {% endfor %}
       </ul>
-      {{ content }}
+      <div id="content">{{ content }}</div>
+      <div id="footer">&nbsp;</div>
   </body>
 </html>
