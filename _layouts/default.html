@@ -1,20 +1,73 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>goodercode</title>
-    <link rel="stylesheet" href="/resources/css/site.css" />
-    <link href='http://fonts.googleapis.com/css?family=Unna' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/resources/css/layout.css" />
-  </head>
-  <body>
-      <h1>gooder code</h1>
-      <a href="http://github.com/webdevwilson"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
-      <ul id="left-column">
-          {% for post in site.posts %}
-          <li><a href="{{ post.url }}">{{ post.title }}</a></li>
-          {% endfor %}
-      </ul>
-      <div id="content">{{ content }}</div>
-      <div id="footer">&nbsp;</div>
-  </body>
+    <head>
+        <title>goodercode</title>
+        <link rel="stylesheet" href="/resources/css/site.css" />
+        <link href='http://fonts.googleapis.com/css?family=Unna' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="/resources/css/layout.css" />
+        <script type="text/javascript" src="http://www.google.com/jsapi?key=AIzaSyA3PHlu0B1ib3yfuuNmPhbRrU2GvvEcoWM"></script>
+    </head>
+    <body>
+        <h1><a href="/">gooder code</a></h1>
+        <a href="http://github.com/webdevwilson"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
+        <div id="left-column">
+            <ul>
+                <li>
+                    <input type="text" id="query" value="search..." /><input type="button" id="searchButton" value="Go" />
+                </li>
+                <li>
+                    <h2>Recent Posts:</h2>
+                    <ul>
+                        {% for post in site.posts %}
+                        <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="content">
+            {{ content }}
+        </div>
+        <div id="footer">&nbsp;</div>
+        <script type="text/javascript">
+            google.load("search", "1");
+            google.load("jquery", "1.7.1");
+            google.setOnLoadCallback(function() {
+                var qf = $('#query');
+                var defSearch = 'search...';
+                var doSearch = function() {
+                    var q = qf.val();
+                    var webSearch = new google.search.WebSearch();
+                    webSearch.setSiteRestriction('http://www.goodercode.com/');
+                    webSearch.setSearchCompleteCallback(webSearch, function() {
+                        var c=$('#content');
+                        var content=c.html();
+                        var results = this.results;
+                        c.fadeOut('fast', function() {
+                            $(this).empty()
+                                .append($('<h1 />').text('results for \'' + q + '\''))
+                                .append($('<a />', { 'href': 'javascript:;' }).text('return').click(function() {
+                                    $('#content').fadeOut('fast', function() {
+                                        $(this).html(content).fadeIn();
+                                        content = false;
+                                    });
+                                }));
+                            $(results).each(function(k,v) {
+                                $('<div />', {'class': 'result'}).click(function() { window.location = v.url; })
+                                    .html('<h2><a href=\"'+v.url+'\">'+v.title+'</a></h2>'+'<p>'+v.content+'</p>')
+                                    .appendTo(c);    
+                            });
+                            c.fadeIn();
+                        });
+                    });
+                    webSearch.execute(q, 1)
+                };
+                qf.val(defSearch)
+                .focus(function() { if( $(this).val() == defSearch ) $(this).val(''); })
+                .blur(function() { if( $(this).val() == '' ) $(this).val(defSearch); })
+                .keydown(function(e) { if(e.keyCode == '13') doSearch.call(this); });
+                $('#searchButton').click(doSearch);
+            });
+        </script>
+    </body>
 </html>

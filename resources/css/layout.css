@@ -1,5 +1,10 @@
-#left-column { width: 20%; float: left; list-style: none; }
+body { margin: 20px; }
+#left-column { width: 20%; float: left; margin: 0; padding: 0; }
+#left-column ul { margin: 0; padding: 0; }
+#left-column ul li { list-style: none; }
 #content { width: 75%; float: right; }
 #footer { clear: both; }
+
+.result { cursor: pointer; padding: 3px 5px;  }
 
 .gist { margin: 10px 0; font-size: .9em; }
