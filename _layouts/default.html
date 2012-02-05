@@ -33,18 +33,20 @@
             google.load("search", "1");
             google.load("jquery", "1.7.1");
             google.setOnLoadCallback(function() {
-                var qf = $('#query');
-                var defSearch = 'search...';
-                var doSearch = function() {
-                    var q = qf.val();
-                    var webSearch = new google.search.WebSearch();
-                    webSearch.setSiteRestriction('http://www.goodercode.com/');
-                    webSearch.setSearchCompleteCallback(webSearch, function() {
-                        var c=$('#content');
-                        var content=c.html();
-                        var results = this.results;
-                        c.fadeOut('fast', function() {
-                            $(this).empty()
+                
+                (function searchFeature() {
+                    var qf = $('#query');
+                    var defSearch = 'search...';
+                    var doSearch = function() {
+                        var q = qf.val();
+                        var webSearch = new google.search.WebSearch();
+                        webSearch.setSiteRestriction('http://www.goodercode.com/');
+                        webSearch.setSearchCompleteCallback(webSearch, function() {
+                            var c=$('#content');
+                            var content=c.html();
+                            var results = this.results;
+                            c.fadeOut('fast', function() {
+                                $(this).empty()
                                 .append($('<h1 />').text('results for \'' + q + '\''))
                                 .append($('<a />', { 'href': 'javascript:;' }).text('return').click(function() {
                                     $('#content').fadeOut('fast', function() {
@@ -52,21 +54,38 @@
                                         content = false;
                                     });
                                 }));
-                            $(results).each(function(k,v) {
-                                $('<div />', {'class': 'result'}).click(function() { window.location = v.url; })
-                                    .html('<h2><a href=\"'+v.url+'\">'+v.title+'</a></h2>'+'<p>'+v.content+'</p>')
+                                $(results).each(function(k,v) {
+                                    $('<div />', {'class': 'result'}).click(function() { window.location = v.url; })
+                                    .html('<h2><a href=\"'+v.url+'\">'+v.title+'</a></h2><br />'+v.url+'<p>'+v.content+'</p>')
                                     .appendTo(c);    
+                                });
+                                c.fadeIn();
                             });
-                            c.fadeIn();
                         });
+                        webSearch.execute(q, 1)
+                    };
+                    qf.val(defSearch)
+                    .focus(function() { if( $(this).val() == defSearch ) $(this).val(''); })
+                    .blur(function() { if( $(this).val() == '' ) $(this).val(defSearch); })
+                    .keydown(function(e) { if(e.keyCode == '13') doSearch.call(this); });
+                    $('#searchButton').click(doSearch);
+                })();
+                
+                (function ajaxifyLinks() {
+                    $('a').live('click', function() {
+                        var href=$(this).attr('href');
+                        if(href.substr(0,1) == '/') {
+                           $.get(href, function(data) {
+                               $('#content').fadeOut(function() {
+                                   $(this).html($(data).filter('div#content').html());
+                                   $(this).fadeIn();
+                               });
+                           });
+                        }
+                        return false;
                     });
-                    webSearch.execute(q, 1)
-                };
-                qf.val(defSearch)
-                .focus(function() { if( $(this).val() == defSearch ) $(this).val(''); })
-                .blur(function() { if( $(this).val() == '' ) $(this).val(defSearch); })
-                .keydown(function(e) { if(e.keyCode == '13') doSearch.call(this); });
-                $('#searchButton').click(doSearch);
+                })();
+                
             });
         </script>
     </body>
